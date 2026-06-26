@@ -1,0 +1,1938 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="theme-color" content="#0d0e1f">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>G.R.E.T. · 根源生态商业模型 · 多劳多得</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<style>
+:root {
+  --bg: #0a0b1a;
+  --bg2: #0f1128;
+  --bg3: #141635;
+  --card: rgba(255,255,255,0.04);
+  --card2: rgba(255,255,255,0.07);
+  --border: rgba(138,110,255,0.15);
+  --border2: rgba(138,110,255,0.35);
+  --text: #e8eaff;
+  --text2: #a0a8cc;
+  --text3: #606888;
+  --gold: #f5c842;
+  --gold2: #ffd700;
+  --gold-dim: rgba(245,200,66,0.12);
+  --purple: #8a6eff;
+  --purple2: #b09eff;
+  --purple-dim: rgba(138,110,255,0.12);
+  --green: #22d3a0;
+  --green-dim: rgba(34,211,160,0.12);
+  --blue: #4fc3f7;
+  --blue-dim: rgba(79,195,247,0.12);
+  --red: #ff6b6b;
+  --red-dim: rgba(255,107,107,0.12);
+  --orange: #ff9f43;
+  --radius: 18px;
+  --radius-sm: 12px;
+  --shadow: 0 4px 24px rgba(0,0,0,0.4);
+  --font: "PingFang SC","Hiragino Sans GB","Microsoft YaHei",-apple-system,sans-serif;
+  --mono: "SF Mono","Menlo","Courier New",monospace;
+}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+html,body{height:100%;overscroll-behavior:none;}
+body{
+  font-family:var(--font);
+  background:var(--bg);
+  color:var(--text);
+  min-height:100vh;
+  overflow-x:hidden;
+  -webkit-font-smoothing:antialiased;
+}
+
+/* ===== ANIMATED BACKGROUND ===== */
+.bg-canvas{
+  position:fixed;top:0;left:0;width:100%;height:100%;
+  pointer-events:none;z-index:0;
+}
+body::before{
+  content:'';position:fixed;inset:0;
+  background:
+    radial-gradient(ellipse 80% 60% at 15% 15%, rgba(138,110,255,0.08) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 80% at 85% 85%, rgba(245,200,66,0.05) 0%, transparent 60%),
+    radial-gradient(ellipse 50% 50% at 60% 20%, rgba(34,211,160,0.05) 0%, transparent 50%);
+  pointer-events:none;z-index:0;
+}
+
+/* ===== APP FRAME ===== */
+.app{position:relative;z-index:1;min-height:100vh;display:flex;flex-direction:column;max-width:430px;margin:0 auto;}
+@media(min-width:480px){
+  .app{box-shadow:0 0 60px rgba(138,110,255,0.15);border-left:1px solid var(--border);border-right:1px solid var(--border);}
+  body{background:linear-gradient(180deg,#05060f,#0a0b1a);}
+}
+
+/* ===== STATUS BAR ===== */
+.status-bar{
+  height:44px;padding:0 20px;
+  display:flex;justify-content:space-between;align-items:center;
+  font-size:12px;font-weight:700;color:var(--text);
+  position:relative;z-index:50;flex-shrink:0;
+  padding-top:env(safe-area-inset-top);
+}
+.status-icons{display:flex;gap:4px;align-items:center;font-size:11px;}
+
+/* ===== HEADER ===== */
+.app-header{
+  padding:4px 16px 12px;
+  display:flex;justify-content:space-between;align-items:center;
+  position:relative;z-index:50;flex-shrink:0;
+}
+.logo-block{display:flex;align-items:center;gap:10px;}
+.logo-text{
+  font-size:20px;font-weight:900;letter-spacing:-0.5px;
+  background:linear-gradient(135deg,var(--purple2),var(--gold));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+}
+.logo-sub{font-size:9px;color:var(--text3);letter-spacing:1.5px;margin-top:1px;}
+.header-btns{display:flex;gap:8px;}
+.hbtn{
+  width:36px;height:36px;border-radius:50%;
+  border:1px solid var(--border);background:var(--card);
+  display:flex;align-items:center;justify-content:center;
+  font-size:15px;cursor:pointer;
+  transition:all .2s;color:var(--text2);
+}
+.hbtn:active{transform:scale(0.9);background:var(--card2);}
+
+/* ===== TAB NAV ===== */
+.tab-nav{
+  display:flex;gap:0;padding:0 12px 10px;
+  overflow-x:auto;-webkit-overflow-scrolling:touch;
+  scrollbar-width:none;flex-shrink:0;
+  position:relative;z-index:50;
+}
+.tab-nav::-webkit-scrollbar{display:none;}
+.tnav{
+  display:flex;flex-direction:column;align-items:center;gap:2px;
+  padding:8px 12px;border-radius:var(--radius-sm);
+  border:1px solid transparent;background:none;
+  font-size:10px;font-weight:700;font-family:var(--font);
+  color:var(--text3);cursor:pointer;white-space:nowrap;
+  transition:all .25s;flex-shrink:0;
+}
+.tnav .tico{font-size:18px;line-height:1;}
+.tnav.active{color:var(--gold);border-color:var(--border2);background:var(--gold-dim);}
+.tnav:active{transform:scale(0.93);}
+
+/* ===== CONTENT ===== */
+.content{
+  flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;
+  padding:0 12px 100px;
+  scroll-behavior:smooth;
+  position:relative;z-index:5;
+}
+.content::-webkit-scrollbar{display:none;}
+
+/* ===== PAGE TRANSITION ===== */
+.page{display:none;}
+.page.active{display:block;animation:pageIn .35s cubic-bezier(0.16,1,0.3,1);}
+@keyframes pageIn{from{opacity:0;transform:translateY(14px) scale(0.99);}to{opacity:1;transform:none;}}
+
+/* ===== HERO ===== */
+.hero{
+  padding:20px 4px 24px;
+  text-align:center;
+  position:relative;overflow:hidden;
+}
+.hero-badge{
+  display:inline-flex;align-items:center;gap:6px;
+  background:var(--purple-dim);border:1px solid rgba(138,110,255,0.35);
+  padding:5px 14px;border-radius:30px;
+  font-size:11px;color:var(--purple2);font-weight:700;letter-spacing:0.5px;
+  margin-bottom:20px;animation:pulseBorder 2.5s infinite;
+}
+@keyframes pulseBorder{0%,100%{border-color:rgba(138,110,255,0.35);}50%{border-color:rgba(138,110,255,0.7);box-shadow:0 0 12px rgba(138,110,255,0.2);}}
+.hero-dot{width:5px;height:5px;border-radius:50%;background:var(--green);animation:blink 1.5s infinite;}
+@keyframes blink{0%,100%{opacity:1;}50%{opacity:0.2;}}
+.hero-title{
+  font-size:30px;font-weight:900;line-height:1.15;letter-spacing:-1px;margin-bottom:12px;
+}
+.hero-title .t1{
+  background:linear-gradient(135deg,#fff 0%,var(--purple2) 60%,var(--gold) 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  display:block;
+}
+.hero-title .t2{
+  color:var(--gold);display:block;
+  text-shadow:0 0 30px rgba(245,200,66,0.35);
+  font-size:22px;
+}
+.hero-core{
+  display:inline-block;
+  font-size:13px;color:var(--gold);font-weight:700;
+  background:var(--gold-dim);border:1px solid rgba(245,200,66,0.2);
+  padding:8px 18px;border-radius:30px;margin:10px 0 20px;letter-spacing:0.3px;
+}
+.hero-stats{
+  display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:20px;
+}
+.hstat{
+  background:var(--card);border:1px solid var(--border);
+  border-radius:var(--radius-sm);padding:14px 10px;text-align:center;
+  transition:all .25s;
+}
+.hstat:active{background:var(--card2);border-color:var(--border2);}
+.hstat-num{
+  font-size:20px;font-weight:900;
+  background:linear-gradient(135deg,var(--purple),var(--gold));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+}
+.hstat-lbl{font-size:10px;color:var(--text3);margin-top:3px;}
+.hero-btns{display:flex;flex-direction:column;gap:8px;}
+
+/* ===== BUTTONS ===== */
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:6px;
+  padding:13px 20px;border-radius:var(--radius-sm);border:none;
+  font-size:13px;font-weight:700;font-family:var(--font);
+  cursor:pointer;transition:all .2s;width:100%;letter-spacing:0.2px;
+}
+.btn:active{transform:scale(0.97);}
+.btn-primary{background:linear-gradient(135deg,var(--purple),#6a4cf5);color:#fff;box-shadow:0 4px 16px rgba(138,110,255,0.35);}
+.btn-primary:active{box-shadow:0 2px 8px rgba(138,110,255,0.2);}
+.btn-gold{background:linear-gradient(135deg,var(--gold),#e0a800);color:#0d0e1f;box-shadow:0 4px 16px rgba(245,200,66,0.3);}
+.btn-green{background:linear-gradient(135deg,var(--green),#1aab80);color:#0d0e1f;box-shadow:0 4px 16px rgba(34,211,160,0.3);}
+.btn-outline{background:transparent;color:var(--text2);border:1px solid var(--border);width:auto;padding:10px 16px;}
+.btn-outline:active{background:var(--card);}
+.btn-row{display:flex;gap:8px;margin-top:10px;}
+.btn-row .btn{flex:1;}
+.btn-sm{padding:9px 14px;font-size:12px;width:auto;border-radius:10px;}
+
+/* ===== CARDS ===== */
+.card{
+  background:var(--card);border:1px solid var(--border);
+  border-radius:var(--radius);padding:16px;margin-bottom:12px;
+  transition:all .2s;position:relative;overflow:hidden;
+}
+.card:active{background:var(--card2);}
+.card-glow{box-shadow:0 0 30px rgba(138,110,255,0.1);border-color:var(--border2);}
+.card-gold{border-color:rgba(245,200,66,0.25);box-shadow:0 0 20px rgba(245,200,66,0.08);}
+.ctitle{
+  font-size:14px;font-weight:800;color:var(--text);margin-bottom:8px;
+  display:flex;align-items:center;gap:8px;
+}
+.cdot{width:7px;height:7px;border-radius:50%;flex-shrink:0;}
+.csub{font-size:12px;color:var(--text2);line-height:1.7;margin-bottom:10px;}
+
+/* ===== GRADIENT CARD ===== */
+.gcard{
+  border-radius:var(--radius);padding:20px 16px;margin-bottom:12px;
+  position:relative;overflow:hidden;
+}
+.gcard-purple{background:linear-gradient(135deg,#6a4cf5,var(--purple));color:#fff;}
+.gcard-gold{background:linear-gradient(135deg,var(--gold),#e0a800);color:#0d0e1f;}
+.gcard-green{background:linear-gradient(135deg,var(--green),#1aab80);color:#0d0e1f;}
+.gcard-dark{background:linear-gradient(135deg,rgba(138,110,255,0.15),rgba(245,200,66,0.08));border:1px solid rgba(138,110,255,0.2);}
+.gcard::after{content:'';position:absolute;top:-30px;right:-30px;width:120px;height:120px;border-radius:50%;background:rgba(255,255,255,0.07);filter:blur(20px);}
+.gc-lbl{font-size:11px;opacity:.8;margin-bottom:4px;}
+.gc-big{font-size:38px;font-weight:900;line-height:1;}
+.gc-sub{font-size:11px;opacity:.75;line-height:1.6;margin-top:6px;}
+
+/* ===== FORMULA BOX ===== */
+.formula{
+  background:linear-gradient(135deg,rgba(138,110,255,0.08),rgba(245,200,66,0.04));
+  border:1px solid rgba(138,110,255,0.2);border-radius:var(--radius-sm);
+  padding:14px 16px;font-family:var(--mono);
+  font-size:11.5px;line-height:2;color:var(--text2);
+  position:relative;overflow:hidden;margin:10px 0;
+}
+.formula::before{
+  content:'FORMULA';position:absolute;top:6px;right:10px;
+  font-size:8px;color:var(--purple);letter-spacing:2px;font-weight:700;opacity:0.4;
+}
+.fv{color:var(--gold);font-weight:700;}
+.fop{color:var(--purple2);}
+.fk{color:var(--green);}
+.fc{color:var(--text3);font-style:italic;}
+
+/* ===== HIGHLIGHT ===== */
+.hl{border-radius:var(--radius-sm);padding:12px 14px;font-size:12.5px;line-height:1.8;margin:8px 0;}
+.hl-gold{background:var(--gold-dim);border-left:3px solid var(--gold);color:#ffe89a;}
+.hl-purple{background:var(--purple-dim);border-left:3px solid var(--purple);color:var(--purple2);}
+.hl-green{background:var(--green-dim);border-left:3px solid var(--green);color:#9af5e0;}
+.hl-red{background:var(--red-dim);border-left:3px solid var(--red);color:#ffb3b3;}
+.hl-blue{background:var(--blue-dim);border-left:3px solid var(--blue);color:#b3e5fc;}
+
+/* ===== BADGE ===== */
+.badge{display:inline-flex;align-items:center;padding:3px 10px;border-radius:20px;font-size:10px;font-weight:700;gap:4px;}
+.b-gold{background:var(--gold-dim);color:var(--gold);}
+.b-purple{background:var(--purple-dim);color:var(--purple2);}
+.b-green{background:var(--green-dim);color:var(--green);}
+.b-red{background:var(--red-dim);color:var(--red);}
+.b-blue{background:var(--blue-dim);color:var(--blue);}
+.b-gray{background:rgba(255,255,255,0.06);color:var(--text3);}
+
+/* ===== TABLE ===== */
+.tbl-wrap{overflow-x:auto;border-radius:var(--radius-sm);border:1px solid var(--border);margin:10px 0;}
+table{width:100%;border-collapse:collapse;font-size:12px;}
+thead tr{background:rgba(138,110,255,0.1);}
+th{padding:10px 10px;text-align:left;color:var(--purple2);font-weight:700;font-size:10.5px;letter-spacing:0.5px;white-space:nowrap;}
+td{padding:10px 10px;border-bottom:1px solid rgba(255,255,255,0.04);color:var(--text2);vertical-align:middle;}
+tr:last-child td{border-bottom:none;}
+tbody tr:active td{background:rgba(255,255,255,0.03);}
+.tc-gold{color:var(--gold);font-weight:700;}
+.tc-green{color:var(--green);font-weight:700;}
+.tc-me{background:rgba(245,200,66,0.06);}
+
+/* ===== INPUTS ===== */
+.fg{margin-bottom:14px;}
+.flabel{
+  font-size:11px;color:var(--text3);font-weight:600;letter-spacing:0.5px;
+  margin-bottom:6px;display:flex;justify-content:space-between;align-items:center;
+}
+.flabel .fval{font-size:13px;color:var(--gold);font-weight:800;}
+input[type="range"]{
+  -webkit-appearance:none;width:100%;height:5px;border-radius:3px;
+  background:linear-gradient(90deg,var(--purple),var(--gold));outline:none;cursor:pointer;
+}
+input[type="range"]::-webkit-slider-thumb{
+  -webkit-appearance:none;width:22px;height:22px;border-radius:50%;
+  background:#fff;box-shadow:0 2px 10px rgba(138,110,255,0.5);cursor:pointer;
+  border:2px solid var(--purple);
+}
+input[type="number"],input[type="text"],select{
+  width:100%;padding:11px 14px;
+  border:1px solid var(--border);border-radius:var(--radius-sm);
+  background:rgba(255,255,255,0.04);color:var(--text);
+  font-size:14px;font-family:var(--font);outline:none;
+  transition:border-color .2s;
+}
+input:focus,select:focus{border-color:var(--purple);background:rgba(138,110,255,0.06);}
+select option{background:#1a1b35;color:var(--text);}
+
+/* ===== RESULT BOX ===== */
+.rbox{border-radius:var(--radius-sm);padding:18px 16px;text-align:center;border:1px solid rgba(138,110,255,0.2);}
+.rbox-gold{border-color:rgba(245,200,66,0.3);background:var(--gold-dim);}
+.rbox-purple{border-color:rgba(138,110,255,0.3);background:var(--purple-dim);}
+.rbox-green{border-color:rgba(34,211,160,0.3);background:var(--green-dim);}
+.rnum{
+  font-size:38px;font-weight:900;line-height:1;
+  background:linear-gradient(135deg,var(--purple),var(--gold));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  transition:all .5s ease;
+}
+.rnum-gold{background:linear-gradient(135deg,var(--gold),#ffaa00);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.rnum-green{background:linear-gradient(135deg,var(--green),#00d4aa);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.rlabel{font-size:11px;color:var(--text3);margin-top:6px;letter-spacing:0.5px;}
+
+/* ===== STEP FLOW ===== */
+.sf{display:flex;flex-direction:column;gap:0;}
+.sfi{display:flex;gap:14px;padding:0 0 18px;position:relative;}
+.sfi:not(:last-child)::before{content:'';position:absolute;left:14px;top:30px;bottom:0;width:2px;background:linear-gradient(180deg,var(--purple),transparent);}
+.sfn{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:#fff;flex-shrink:0;z-index:1;}
+.sfn-p{background:linear-gradient(135deg,var(--purple),#6a4cf5);}
+.sfn-g{background:linear-gradient(135deg,var(--gold),#e0a800);color:#0d0e1f;}
+.sfn-gr{background:linear-gradient(135deg,var(--green),#1aab80);color:#0d0e1f;}
+.sfn-b{background:linear-gradient(135deg,var(--blue),#0288d1);}
+.sft{font-size:13px;font-weight:700;color:var(--text);margin-bottom:3px;}
+.sfd{font-size:11.5px;color:var(--text3);line-height:1.6;}
+
+/* ===== THEOREM CARD ===== */
+.th-card{
+  background:var(--card);border:1px solid var(--border);
+  border-radius:var(--radius);padding:16px 14px;
+  cursor:pointer;transition:all .25s;margin-bottom:8px;
+  position:relative;overflow:hidden;
+}
+.th-card::before{content:attr(data-n);position:absolute;right:12px;top:6px;font-size:50px;font-weight:900;color:rgba(255,255,255,0.03);pointer-events:none;}
+.th-card.open{border-color:rgba(245,200,66,0.3);background:rgba(245,200,66,0.03);}
+.th-card:active{background:var(--card2);}
+.th-tag{font-size:10px;color:var(--purple2);font-weight:700;letter-spacing:1.5px;margin-bottom:5px;}
+.th-name{font-size:15px;font-weight:800;color:var(--text);margin-bottom:2px;padding-right:24px;}
+.th-en{font-size:10px;color:var(--text3);letter-spacing:0.5px;margin-bottom:6px;}
+.th-brief{font-size:12px;color:var(--text3);line-height:1.6;}
+.th-arrow{position:absolute;right:14px;top:50%;transform:translateY(-50%);font-size:16px;color:var(--text3);transition:transform .25s;}
+.th-card.open .th-arrow{transform:translateY(-50%) rotate(90deg);color:var(--gold);}
+.th-body{display:none;margin-top:12px;padding-top:12px;border-top:1px solid var(--border);}
+.th-card.open .th-body{display:block;animation:slideDown .3s ease;}
+@keyframes slideDown{from{opacity:0;transform:translateY(-6px);}to{opacity:1;transform:none;}}
+
+/* ===== PCU BARS ===== */
+.pcu-item{margin-bottom:10px;}
+.pi-h{display:flex;justify-content:space-between;margin-bottom:4px;}
+.pi-name{font-size:12px;color:var(--text2);font-weight:600;}
+.pi-score{font-size:12px;color:var(--gold);font-weight:700;}
+.pi-track{height:6px;background:rgba(255,255,255,0.06);border-radius:3px;overflow:hidden;}
+.pi-fill{height:100%;border-radius:3px;transition:width .6s cubic-bezier(0.4,0,0.2,1);}
+
+/* ===== INCOME BARS ===== */
+.ib{margin-bottom:10px;}
+.ib-h{display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;}
+.ib-lbl{font-size:11.5px;color:var(--text3);}
+.ib-val{font-size:13px;font-weight:800;color:var(--text);}
+.ib-track{height:7px;background:rgba(255,255,255,0.05);border-radius:4px;overflow:hidden;}
+.ib-fill{height:100%;border-radius:4px;transition:width .8s cubic-bezier(0.4,0,0.2,1);}
+
+/* ===== ROLE SELECTOR ===== */
+.role-sel{display:flex;gap:6px;margin-bottom:14px;}
+.rbtn{
+  flex:1;padding:9px 6px;border:1px solid var(--border);
+  border-radius:var(--radius-sm);background:var(--card);
+  font-size:11px;font-weight:700;font-family:var(--font);
+  cursor:pointer;text-align:center;color:var(--text3);transition:all .2s;
+}
+.rbtn.ra-gold{border-color:var(--gold);color:var(--gold);background:var(--gold-dim);}
+.rbtn.ra-blue{border-color:var(--blue);color:var(--blue);background:var(--blue-dim);}
+.rbtn.ra-green{border-color:var(--green);color:var(--green);background:var(--green-dim);}
+.rbtn:active{transform:scale(0.97);}
+
+/* ===== SCAN LOG ===== */
+.scan-entry{
+  background:var(--card);border:1px solid var(--border);
+  border-radius:var(--radius-sm);padding:10px 12px;
+  margin-bottom:6px;animation:fadeSlide .3s ease;
+  border-left:3px solid var(--border);
+}
+.scan-entry.origin{border-left-color:var(--gold);}
+.scan-entry.converter{border-left-color:var(--blue);}
+.scan-entry.retainer{border-left-color:var(--green);}
+.se-h{display:flex;justify-content:space-between;align-items:center;margin-bottom:3px;}
+.se-time{font-size:10px;color:var(--text3);}
+.se-body{font-size:12px;color:var(--text2);line-height:1.5;}
+@keyframes fadeSlide{from{opacity:0;transform:translateX(-8px);}to{opacity:1;transform:none;}}
+
+/* ===== RANK ROWS ===== */
+.rank-row{
+  display:flex;align-items:center;gap:12px;
+  padding:10px 12px;border-radius:var(--radius-sm);margin-bottom:6px;
+  border:1px solid transparent;transition:all .2s;
+}
+.rank-row:active{background:var(--card);}
+.rank-me{background:var(--gold-dim);border-color:rgba(245,200,66,0.25);}
+.rank-above{background:rgba(34,211,160,0.05);}
+.rank-below{background:rgba(255,107,107,0.05);}
+.rank-n{width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;flex-shrink:0;}
+.rank-info{flex:1;}
+.rank-name{font-size:13px;font-weight:700;color:var(--text);}
+.rank-detail{font-size:10px;color:var(--text3);}
+.rank-tcu{font-size:14px;font-weight:800;color:var(--gold);}
+
+/* ===== COMPARE ===== */
+.compare-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px;}
+.cmp-card{border-radius:var(--radius-sm);padding:14px;text-align:center;border:1px solid var(--border);background:var(--card);}
+.cmp-card.cmp-winner{border-color:rgba(34,211,160,0.3);background:var(--green-dim);}
+.cmp-card.cmp-loser{border-color:rgba(255,107,107,0.3);background:var(--red-dim);}
+.cmp-name{font-size:11px;color:var(--text3);margin-bottom:4px;}
+.cmp-num{font-size:22px;font-weight:900;}
+
+/* ===== BOTTOM NAV ===== */
+.bottom-nav{
+  position:fixed;bottom:0;left:50%;transform:translateX(-50%);
+  width:100%;max-width:430px;
+  height:calc(64px + env(safe-area-inset-bottom));
+  background:rgba(10,11,26,0.94);backdrop-filter:blur(20px);
+  border-top:1px solid var(--border);
+  display:flex;justify-content:space-around;align-items:flex-start;
+  padding-top:8px;padding-bottom:env(safe-area-inset-bottom);
+  z-index:100;
+}
+.bnav{
+  display:flex;flex-direction:column;align-items:center;gap:3px;
+  min-width:48px;cursor:pointer;background:none;border:none;
+  color:var(--text3);font-size:9px;font-weight:700;font-family:var(--font);
+  transition:all .2s;flex:1;
+}
+.bnav .bico{font-size:21px;line-height:1;transition:transform .2s;}
+.bnav.active{color:var(--gold);}
+.bnav.active .bico{transform:scale(1.18);}
+.bnav:active{transform:scale(0.9);}
+
+/* ===== TOAST ===== */
+.toast{
+  position:fixed;bottom:80px;left:50%;transform:translateX(-50%) translateY(16px);
+  background:rgba(20,22,53,0.96);border:1px solid rgba(138,110,255,0.4);
+  color:var(--text);padding:11px 22px;border-radius:30px;
+  font-size:12.5px;font-weight:600;z-index:999;
+  opacity:0;transition:all .3s ease;pointer-events:none;
+  box-shadow:0 8px 30px rgba(0,0,0,0.4);white-space:nowrap;
+}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+
+/* ===== SPLASH ===== */
+.splash{
+  position:fixed;inset:0;
+  background:linear-gradient(135deg,#0a0b1a,#141635);
+  z-index:500;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
+  color:#fff;text-align:center;
+  transition:opacity .6s,visibility .6s;
+}
+.splash.hidden{opacity:0;visibility:hidden;pointer-events:none;}
+.splash-logo{font-size:70px;margin-bottom:20px;animation:pulseGlow 2s infinite;}
+@keyframes pulseGlow{0%,100%{transform:scale(1);filter:drop-shadow(0 0 12px rgba(138,110,255,0.4));}50%{transform:scale(1.06);filter:drop-shadow(0 0 28px rgba(138,110,255,0.7));}}
+.splash h1{font-size:28px;font-weight:900;margin-bottom:6px;background:linear-gradient(135deg,var(--purple2),var(--gold));-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.splash p{font-size:12px;color:var(--text3);line-height:1.8;}
+.splash-bar{width:120px;height:3px;background:rgba(255,255,255,0.1);border-radius:2px;margin:24px auto 0;overflow:hidden;}
+.splash-bar-fill{height:100%;background:linear-gradient(90deg,var(--purple),var(--gold));border-radius:2px;animation:barFill 1.8s ease-out forwards;}
+@keyframes barFill{from{width:0%;}to{width:100%;}}
+
+/* ===== DIVIDER ===== */
+.divider{height:1px;background:linear-gradient(90deg,transparent,var(--border),transparent);margin:14px 0;}
+
+/* ===== CHART ===== */
+.chart-wrap{position:relative;height:200px;margin:12px 0;}
+
+/* ===== PROGRESS RING ===== */
+.ring-wrap{position:relative;display:inline-flex;align-items:center;justify-content:center;}
+.ring-val{position:absolute;text-align:center;}
+.ring-num{font-size:20px;font-weight:900;color:var(--gold);}
+.ring-sub{font-size:9px;color:var(--text3);}
+
+/* ===== ANIMATION CLASSES ===== */
+.fade-up{animation:fadeUp .5s ease both;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(16px);}to{opacity:1;transform:none;}}
+.d1{animation-delay:.08s;}.d2{animation-delay:.16s;}.d3{animation-delay:.24s;}.d4{animation-delay:.32s;}
+
+/* ===== GRID ===== */
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;}
+
+/* ===== SCROLLBAR ===== */
+::-webkit-scrollbar{width:3px;height:3px;}
+::-webkit-scrollbar-track{background:transparent;}
+::-webkit-scrollbar-thumb{background:rgba(138,110,255,0.3);border-radius:2px;}
+
+/* ===== PARTICLE ===== */
+.particle{position:absolute;border-radius:50%;pointer-events:none;animation:particleFloat linear infinite;}
+@keyframes particleFloat{0%{transform:translateY(100vh) rotate(0);opacity:0;}10%{opacity:.7;}90%{opacity:.3;}100%{transform:translateY(-50px) translateX(100px) rotate(720deg);opacity:0;}}
+
+/* ===== ROADMAP ===== */
+.roadmap-item{
+  position:relative;padding:16px 16px 16px 56px;
+  border-radius:var(--radius-sm);margin-bottom:10px;
+  border:1px solid var(--border);background:var(--card);
+  transition:all .2s;
+}
+.roadmap-item:active{background:var(--card2);}
+.rm-phase{position:absolute;left:16px;top:50%;transform:translateY(-50%);width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;}
+.rm-phase-badge{position:absolute;right:12px;top:50%;transform:translateY(-50%);}
+.rm-n{font-size:10px;font-weight:700;color:var(--purple2);margin-bottom:3px;letter-spacing:1px;}
+.rm-t{font-size:13px;font-weight:800;color:var(--text);margin-bottom:2px;}
+.rm-s{font-size:11.5px;color:var(--text3);line-height:1.5;padding-right:60px;}
+
+/* ===== NAV TILES ===== */
+.nav-tiles{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px;}
+.ntile{
+  background:var(--card);border:1px solid var(--border);
+  border-radius:var(--radius-sm);padding:14px 12px;
+  cursor:pointer;transition:all .2s;
+}
+.ntile:active{background:var(--card2);transform:scale(0.97);}
+.ntile-ico{font-size:24px;margin-bottom:6px;}
+.ntile-t{font-size:12px;font-weight:800;color:var(--text);margin-bottom:2px;}
+.ntile-s{font-size:10px;color:var(--text3);line-height:1.4;}
+
+/* ===== FEATURE TAGS ===== */
+.ftag{
+  display:inline-flex;align-items:center;gap:3px;
+  padding:5px 10px;border-radius:20px;font-size:10px;font-weight:700;
+  background:var(--green-dim);color:var(--green);margin:2px;
+}
+
+/* ===== LP CARD ===== */
+.lp-card{
+  background:linear-gradient(135deg,rgba(245,200,66,0.07),rgba(138,110,255,0.05));
+  border:1px solid rgba(245,200,66,0.18);border-radius:var(--radius);padding:18px 16px;margin-bottom:12px;
+}
+</style>
+</head>
+<body>
+
+<!-- ===== SPLASH ===== -->
+<div class="splash" id="splash">
+  <canvas class="bg-canvas" id="splashCanvas"></canvas>
+  <div class="splash-logo">🌱</div>
+  <h1>G.R.E.T.</h1>
+  <p>根源生态商业模型 v6.0<br>多劳多得 · 信任可量化 · 价值可分配</p>
+  <div class="splash-bar"><div class="splash-bar-fill"></div></div>
+</div>
+
+<!-- ===== APP ===== -->
+<div class="app">
+  <canvas class="bg-canvas" id="appCanvas" style="position:fixed;z-index:0;pointer-events:none;top:0;left:0;width:100%;height:100%;"></canvas>
+
+  <!-- STATUS BAR -->
+  <div class="status-bar">
+    <span id="clock" style="font-weight:700;font-size:13px;">09:41</span>
+    <span class="status-icons" style="font-size:10px;letter-spacing:1px;">▮▮▮▮ 📶 🔋</span>
+  </div>
+
+  <!-- APP HEADER -->
+  <div class="app-header">
+    <div class="logo-block">
+      <div>
+        <div class="logo-text">G.R.E.T.</div>
+        <div class="logo-sub">GROWTH-ROOT ECOSYSTEM v6.0</div>
+      </div>
+    </div>
+    <div class="header-btns">
+      <button class="hbtn" onclick="shareApp()" title="分享">↗</button>
+      <button class="hbtn" onclick="showAbout()" title="关于">ℹ</button>
+    </div>
+  </div>
+
+  <!-- TAB NAV -->
+  <div class="tab-nav">
+    <button class="tnav active" onclick="goPage('home',this)"><span class="tico">🏠</span>首页</button>
+    <button class="tnav" onclick="goPage('theorems',this)"><span class="tico">📜</span>定理</button>
+    <button class="tnav" onclick="goPage('scan',this)"><span class="tico">📱</span>扫码</button>
+    <button class="tnav" onclick="goPage('tcu',this)"><span class="tico">🧮</span>TCU</button>
+    <button class="tnav" onclick="goPage('commission',this)"><span class="tico">💰</span>提成</button>
+    <button class="tnav" onclick="goPage('overview',this)"><span class="tico">👤</span>总览</button>
+    <button class="tnav" onclick="goPage('lp',this)"><span class="tico">🏛️</span>LP</button>
+  </div>
+
+  <!-- CONTENT -->
+  <div class="content" id="content">
+
+    <!-- ================== 首页 ================== -->
+    <div class="page active" id="page-home">
+
+      <!-- Hero -->
+      <div class="hero fade-up">
+        <div class="hero-badge"><span class="hero-dot"></span> LIVE · TCU 2.0 已上线</div>
+        <div class="hero-title">
+          <span class="t1">信任，是第三种资本</span>
+          <span class="t2">多劳多得，下级可超上级</span>
+        </div>
+        <div class="hero-core">⚡ 你的收入上限，只由你的 TCU 决定</div>
+        <div class="hero-stats">
+          <div class="hstat"><div class="hstat-num">5%→15%</div><div class="hstat-lbl">提成比例区间</div></div>
+          <div class="hstat"><div class="hstat-num">3角色</div><div class="hstat-lbl">源点/转化/留存</div></div>
+          <div class="hstat"><div class="hstat-num">5维PCU</div><div class="hstat-lbl">信任度综合评分</div></div>
+          <div class="hstat"><div class="hstat-num">终身ODR</div><div class="hstat-lbl">源点分红权</div></div>
+        </div>
+        <div class="hero-btns">
+          <button class="btn btn-gold" onclick="goPage('tcu',document.querySelectorAll('.tnav')[3])">🧮 TCU 2.0 计算器</button>
+          <button class="btn btn-primary" onclick="goPage('commission',document.querySelectorAll('.tnav')[4])">💰 提成引擎</button>
+          <div class="btn-row">
+            <button class="btn btn-outline btn-sm" onclick="goPage('theorems',document.querySelectorAll('.tnav')[1])">📜 六条定理</button>
+            <button class="btn btn-outline btn-sm" onclick="goPage('scan',document.querySelectorAll('.tnav')[2])">📱 扫码追踪</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- 核心信念 -->
+      <div class="card card-glow fade-up d1">
+        <div class="ctitle"><span class="cdot" style="background:var(--gold);box-shadow:0 0 8px var(--gold);"></span>核心信念：多劳多得</div>
+        <div class="csub">在 G.R.E.T. 里，下级可以光明正大地比上级赚得多。你的收入只由你的贡献决定，不由你的层级决定。</div>
+        <div class="formula" style="margin-bottom:0;">
+          收入上限 <span class="fop">=</span> <span class="fv">f(TCU贡献)</span> <span class="fop">×</span> 提成比例 <span class="fc">（与层级、资历无关）</span>
+        </div>
+      </div>
+
+      <!-- 三大支柱 -->
+      <div class="card fade-up d2">
+        <div class="ctitle"><span class="cdot" style="background:var(--purple);"></span>三大支柱</div>
+        <div class="grid3">
+          <div class="ntile" style="grid-column:unset;" onclick="goPage('theorems',document.querySelectorAll('.tnav')[1])">
+            <div class="ntile-ico">🔍</div>
+            <div class="ntile-t">可追溯</div>
+            <div class="ntile-s">扫码锁定信任源点</div>
+          </div>
+          <div class="ntile" style="grid-column:unset;" onclick="goPage('tcu',document.querySelectorAll('.tnav')[3])">
+            <div class="ntile-ico">📊</div>
+            <div class="ntile-t">可度量</div>
+            <div class="ntile-s">TCU量化信任</div>
+          </div>
+          <div class="ntile" style="grid-column:unset;" onclick="goPage('commission',document.querySelectorAll('.tnav')[4])">
+            <div class="ntile-ico">⚖️</div>
+            <div class="ntile-t">可分配</div>
+            <div class="ntile-s">按贡献拿回报</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 快速导航 -->
+      <div class="card fade-up d3">
+        <div class="ctitle"><span class="cdot" style="background:var(--blue);"></span>快速导航</div>
+        <div class="nav-tiles">
+          <div class="ntile" onclick="goPage('theorems',document.querySelectorAll('.tnav')[1])"><div class="ntile-ico">📜</div><div class="ntile-t">六条定理</div><div class="ntile-s">不可动摇的逻辑起点</div></div>
+          <div class="ntile" onclick="goPage('scan',document.querySelectorAll('.tnav')[2])"><div class="ntile-ico">📱</div><div class="ntile-t">扫码追踪</div><div class="ntile-s">源点+转化+留存</div></div>
+          <div class="ntile" onclick="goPage('tcu',document.querySelectorAll('.tnav')[3])"><div class="ntile-ico">🧮</div><div class="ntile-t">TCU 2.0</div><div class="ntile-s">PCU×角色权重</div></div>
+          <div class="ntile" onclick="goPage('commission',document.querySelectorAll('.tnav')[4])"><div class="ntile-ico">💰</div><div class="ntile-t">提成引擎</div><div class="ntile-s">四条收入线透明算</div></div>
+          <div class="ntile" onclick="goPage('overview',document.querySelectorAll('.tnav')[5])"><div class="ntile-ico">👤</div><div class="ntile-t">我的总览</div><div class="ntile-s">TCU分层+排名审计</div></div>
+          <div class="ntile" onclick="goPage('lp',document.querySelectorAll('.tnav')[6])"><div class="ntile-ico">🏛️</div><div class="ntile-t">LP体系</div><div class="ntile-s">五条收入线+股东</div></div>
+        </div>
+      </div>
+
+      <!-- 传统 vs GRET 对比 -->
+      <div class="card fade-up d4">
+        <div class="ctitle"><span class="cdot" style="background:var(--green);"></span>传统直销 vs G.R.E.T.</div>
+        <div class="tbl-wrap">
+          <table>
+            <thead><tr><th>维度</th><th style="color:var(--red);">❌ 传统</th><th style="color:var(--green);">✅ G.R.E.T.</th></tr></thead>
+            <tbody>
+              <tr><td>收入决定因素</td><td style="color:var(--red);">层级关系</td><td class="tc-green">TCU贡献</td></tr>
+              <tr><td>下级能超上级</td><td style="color:var(--red);">几乎不可能</td><td class="tc-green">系统常态</td></tr>
+              <tr><td>信任价值归属</td><td style="color:var(--red);">谁签单归谁</td><td class="tc-green">三角色各有权重</td></tr>
+              <tr><td>提成可否验证</td><td style="color:var(--red);">黑盒</td><td class="tc-green">全链路可审计</td></tr>
+              <tr><td>角色如何认定</td><td style="color:var(--red);">上级任命</td><td class="tc-green">扫码行为涌现</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- 立即体验 -->
+      <div class="card card-gold">
+        <div class="ctitle"><span class="cdot" style="background:var(--gold);box-shadow:0 0 8px var(--gold);"></span>立即体验</div>
+        <button class="btn btn-gold" onclick="goPage('commission',document.querySelectorAll('.tnav')[4]);showComparison()" style="margin-bottom:8px;">🔥 验证：下级如何超过上级</button>
+        <button class="btn btn-primary" onclick="goPage('tcu',document.querySelectorAll('.tnav')[3])">🧮 打开 TCU 2.0 计算器</button>
+      </div>
+
+      <!-- 系统亮点 -->
+      <div class="card">
+        <div class="ctitle"><span class="cdot" style="background:var(--blue);"></span>系统亮点</div>
+        <div style="display:flex;flex-wrap:wrap;gap:4px;">
+          <span class="ftag">✅ 源点永久锁定</span>
+          <span class="ftag">✅ ODR 终身分红</span>
+          <span class="ftag">✅ TCU 排名透明</span>
+          <span class="ftag">✅ PCU 5维标准化</span>
+          <span class="ftag">✅ 防作弊审计</span>
+          <span class="ftag">✅ LP 并表分红</span>
+          <span class="ftag">✅ 角色自动涌现</span>
+          <span class="ftag">✅ 时间衰减激励</span>
+          <span class="ftag">✅ 多劳多得保障</span>
+          <span class="ftag">✅ 四条收入线</span>
+        </div>
+      </div>
+
+      <!-- 四阶段路线图 -->
+      <div class="card">
+        <div class="ctitle"><span class="cdot" style="background:var(--purple);"></span>四阶段落地路线图</div>
+        <div class="roadmap-item">
+          <div class="rm-phase" style="background:rgba(34,211,160,0.2);color:var(--green);">1</div>
+          <div class="rm-n">PHASE ONE · 第1-2月</div>
+          <div class="rm-t">Trust Traceability — 信任可追溯</div>
+          <div class="rm-s">上线扫码系统，100%记录源点/转化/留存</div>
+          <div class="rm-phase-badge"><span class="badge b-green">进行中</span></div>
+        </div>
+        <div class="roadmap-item">
+          <div class="rm-phase" style="background:rgba(138,110,255,0.2);color:var(--purple);">2</div>
+          <div class="rm-n">PHASE TWO · 第3-4月</div>
+          <div class="rm-t">TCU Quantification — 信任资本量化</div>
+          <div class="rm-s">TCU 2.0计算器上线，百分位滑动提成</div>
+          <div class="rm-phase-badge"><span class="badge b-purple">规划中</span></div>
+        </div>
+        <div class="roadmap-item">
+          <div class="rm-phase" style="background:rgba(245,200,66,0.2);color:var(--gold);">3</div>
+          <div class="rm-n">PHASE THREE · 第5-6月</div>
+          <div class="rm-t">Profit Pool — 利润池并表</div>
+          <div class="rm-s">建立LP基金池，TCU加权分红60%</div>
+          <div class="rm-phase-badge"><span class="badge b-gold">待启动</span></div>
+        </div>
+        <div class="roadmap-item">
+          <div class="rm-phase" style="background:rgba(79,195,247,0.2);color:var(--blue);">4</div>
+          <div class="rm-n">PHASE FOUR · 第7-12月</div>
+          <div class="rm-t">Ecosystem Emergence — 生态涌现</div>
+          <div class="rm-s">角色自动涌现，跨区共振，品牌复利池</div>
+          <div class="rm-phase-badge"><span class="badge b-blue">远期</span></div>
+        </div>
+      </div>
+    </div><!-- /home -->
+
+    <!-- ================== 六条定理 ================== -->
+    <div class="page" id="page-theorems">
+      <div style="padding:8px 4px;">
+        <div style="text-align:center;padding:16px 0 20px;">
+          <div class="badge b-purple" style="margin-bottom:10px;font-size:11px;letter-spacing:2px;">SIX THEOREMS</div>
+          <div style="font-size:22px;font-weight:900;color:var(--text);margin-bottom:6px;">六条不可动摇的定理</div>
+          <div style="font-size:12px;color:var(--text3);line-height:1.6;">G.R.E.T. 的全部设计，都可以从这六条定理推导出来</div>
+        </div>
+
+        <div class="th-card" data-n="01" onclick="toggleTh(this)">
+          <div class="th-tag">定理一</div>
+          <div class="th-name">信任有起源</div>
+          <div class="th-en">Trust Origin Theorem</div>
+          <div class="th-brief">任何一笔商业交易中的信任，都有且只有一个起源。</div>
+          <span class="th-arrow">›</span>
+          <div class="th-body">
+            <div class="hl hl-gold">"第一次建立连接的那个时刻、那个人——这是信任的源点，永久锁定，不可篡改，不可转移。"</div>
+            <div class="formula">
+              <span class="fc">推论：</span> <span class="fv">源点（Origin Point）</span> 永久锁定<br>
+              <span class="fk">ODR比例</span> <span class="fop">=</span> <span class="fv">1%</span> <span class="fop">+</span> <span class="fv">14%</span> <span class="fop">×</span> <span class="fop">(</span>TCU百分位 <span class="fop">/</span> <span class="fv">100</span><span class="fop">)</span>
+            </div>
+            <div class="hl hl-purple" style="font-size:12px;">
+              <strong>示例：</strong>王老师带来客户陈总（第一次扫码）→ 王老师永久锁定为陈总"源点者" → 陈总未来所有消费，王老师按ODR比例分红，不管是否在场。
+            </div>
+          </div>
+        </div>
+
+        <div class="th-card" data-n="02" onclick="toggleTh(this)">
+          <div class="th-tag">定理二</div>
+          <div class="th-name">信任是第三种资本</div>
+          <div class="th-en">Trust as Third Capital</div>
+          <div class="th-brief">信任可以量化、积累、分配，与金钱资本、人力资本并列。</div>
+          <span class="th-arrow">›</span>
+          <div class="th-body">
+            <div class="hl hl-gold">"信任不是关系，不是感觉，而是一种可以量化、积累、交易的资本形式。"</div>
+            <div class="formula">
+              <span class="fv">信任资本</span> <span class="fop">≡</span> <span class="fk">TCU</span>（Trust Capital Unit，信任资本单元）<br>
+              <span class="fc">性质：</span>可量化（TCU计分）· 可积累（持续服务→TCU增长）· 可分配
+            </div>
+            <div class="grid3" style="margin-top:12px;">
+              <div style="padding:10px 8px;background:rgba(255,255,255,0.03);border-radius:8px;text-align:center;"><div style="font-size:20px;">💴</div><div style="font-size:10px;color:var(--text3);margin-top:3px;">金钱资本</div></div>
+              <div style="padding:10px 8px;background:rgba(255,255,255,0.03);border-radius:8px;text-align:center;"><div style="font-size:20px;">👥</div><div style="font-size:10px;color:var(--text3);margin-top:3px;">人力资本</div></div>
+              <div style="padding:10px 8px;background:var(--gold-dim);border:1px solid rgba(245,200,66,0.3);border-radius:8px;text-align:center;"><div style="font-size:20px;">🔐</div><div style="font-size:10px;color:var(--gold);margin-top:3px;font-weight:700;">信任资本</div></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="th-card" data-n="03" onclick="toggleTh(this)">
+          <div class="th-tag">定理三</div>
+          <div class="th-name">价值必须归因到起源</div>
+          <div class="th-en">Value Attribution Theorem</div>
+          <div class="th-brief">任何由信任产生的商业价值，必须按可追溯比例，归因到所有参与者。</div>
+          <span class="th-arrow">›</span>
+          <div class="th-body">
+            <div class="hl hl-gold">"不允许截胡。A建立了信任，B不能只因为签单就拿走全部佣金。"</div>
+            <div class="formula">
+              <span class="fv">三级追溯：</span> 直接(100%) <span class="fop">+</span> 二级(<span class="fk">×50%</span>) <span class="fop">+</span> 三级(<span class="fk">×25%</span>)<br>
+              <span class="fc">注意：追溯基础是"下级的提成金额"，非"下级销售额"</span>
+            </div>
+            <div class="hl hl-red" style="font-size:11.5px;">
+              <strong>⚠️ 旧版常见错误：</strong>把"追溯提成"算成"下级销售额 × 比例"。<br>
+              <strong>✅ 正确：</strong>二级追溯 = 下级已拿到的直接提成 × 50%
+            </div>
+          </div>
+        </div>
+
+        <div class="th-card" data-n="04" onclick="toggleTh(this)">
+          <div class="th-tag">定理四</div>
+          <div class="th-name">共振产生涌现</div>
+          <div class="th-en">Resonance Emergence Theorem</div>
+          <div class="th-brief">源点+转化+留存由不同人担任时，价值大于各自独立之和。</div>
+          <span class="th-arrow">›</span>
+          <div class="th-body">
+            <div class="formula">
+              <span class="fc">三角色基础权重（基线）：</span><br>
+              源点者 <span class="fop">=</span> <span class="fv">10%</span> × 客户终身消费 <span class="fc">（找到客户的价值）</span><br>
+              转化者 <span class="fop">=</span> <span class="fv">60%</span> × 首次成交金额 <span class="fc">（成交的价值）</span><br>
+              留存者 <span class="fop">=</span> <span class="fv">100%</span> × 复购金额 <span class="fc">（维护的价值）</span>
+            </div>
+            <div class="hl hl-purple" style="font-size:11.5px;">
+              <strong>⚡ TCU 2.0：</strong>基础权重再乘以 PCU 信任度加权（0.5 + 0.5 × PCU），确保量纲统一。
+            </div>
+          </div>
+        </div>
+
+        <div class="th-card" data-n="05" onclick="toggleTh(this)">
+          <div class="th-tag">定理五</div>
+          <div class="th-name">贡献与回报必须对等</div>
+          <div class="th-en">Contribution-Reward Alignment</div>
+          <div class="th-brief">一个人的回报只由贡献决定，不由层级、资历、关系决定。</div>
+          <span class="th-arrow">›</span>
+          <div class="th-body">
+            <div class="formula">
+              <span class="fk">直接提成比例</span> <span class="fop">=</span> <span class="fv">5%</span> <span class="fop">+</span> <span class="fv">10%</span> <span class="fop">×</span> <span class="fop">(</span>TCU百分位 <span class="fop">/</span> <span class="fv">100</span><span class="fop">)</span><br>
+              <span class="fc">范围：5%（末位）~ 15%（首位），连续滑动</span>
+            </div>
+            <div style="margin-top:12px;">
+              <div style="display:flex;justify-content:space-between;font-size:10px;color:var(--text3);margin-bottom:4px;"><span>末位 → 5%</span><span>首位 → 15%</span></div>
+              <div style="height:8px;background:linear-gradient(90deg,var(--red),var(--orange),var(--gold),var(--green));border-radius:4px;"></div>
+              <div style="font-size:11px;color:var(--text3);margin-top:6px;text-align:center;">下级TCU排名高于上级 → 下级收入超过上级 ✅</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="th-card" data-n="06" onclick="toggleTh(this)">
+          <div class="th-tag">定理六</div>
+          <div class="th-name">角色是涌现的，不是任命的</div>
+          <div class="th-en">Role Emergence Theorem</div>
+          <div class="th-brief">一个人在 G.R.E.T. 中的角色，由行为数据自动涌现，不由上级任命。</div>
+          <span class="th-arrow">›</span>
+          <div class="th-body">
+            <div class="formula">
+              <span class="fv">Connector</span> <span class="fc">连接者</span>：TCU前50% <span class="fop">+</span> 二级≥5人<br>
+              <span class="fv">Coordinator</span> <span class="fc">协调者</span>：TCU前20% <span class="fop">+</span> 二级≥15人<br>
+              <span class="fv">Growth Lead</span> <span class="fc">增长负责人</span>：TCU前5% <span class="fop">+</span> 二级≥30人
+            </div>
+            <div class="hl hl-green" style="font-size:11.5px;">
+              本月达标 → 自动涌现；下月不达标 → 自动退出。不设经理/总监等title。
+            </div>
+          </div>
+        </div>
+
+        <!-- 公式速查 -->
+        <div class="card" style="margin-top:16px;">
+          <div class="ctitle"><span class="cdot" style="background:var(--purple2);"></span>公式速查</div>
+          <div class="formula">
+            <span class="fk">PCU</span> <span class="fop">=</span> <span class="fv">0.30</span>×留存率 <span class="fop">+</span> <span class="fv">0.25</span>×到店率 <span class="fop">+</span> <span class="fv">0.25</span>×转介绍率 <span class="fop">+</span> <span class="fv">0.10</span>×(1-投诉率) <span class="fop">+</span> <span class="fv">0.10</span>×自消率<br><br>
+            <span class="fk">W_角色</span> <span class="fop">=</span> <span class="fv">基础权重</span> <span class="fop">×</span> <span class="fop">(</span><span class="fv">0.5</span> <span class="fop">+</span> <span class="fv">0.5×PCU</span><span class="fop">)</span><br><br>
+            <span class="fk">TCU_k</span> <span class="fop">=</span> <span class="fv">W_角色</span> <span class="fop">×</span> <span class="fv">消费金额</span> <span class="fop">×</span> <span class="fv">τ</span> <span class="fop">×</span> <span class="fv">A(t)</span><br><br>
+            <span class="fk">直接提成</span> <span class="fop">=</span> 本人服务消费额 <span class="fop">×</span> <span class="fop">[</span><span class="fv">5% + 10%×(TCU百分位/100)</span><span class="fop">]</span><br>
+            <span class="fk">二级追溯</span> <span class="fop">=</span> Σ(下级直接提成金额) <span class="fop">×</span> <span class="fv">50%</span><br>
+            <span class="fk">三级追溯</span> <span class="fop">=</span> Σ(三级直接提成金额) <span class="fop">×</span> <span class="fv">25%</span><br>
+            <span class="fk">ODR</span> <span class="fop">=</span> Σ(源点客户消费额) <span class="fop">×</span> <span class="fop">[</span><span class="fv">1% + 14%×(TCU百分位/100)</span><span class="fop">]</span>
+          </div>
+        </div>
+      </div>
+    </div><!-- /theorems -->
+
+    <!-- ================== 扫码追踪 ================== -->
+    <div class="page" id="page-scan">
+      <div style="padding:8px 4px;">
+        <div style="text-align:center;padding:16px 0 20px;">
+          <div class="badge b-blue" style="margin-bottom:10px;font-size:11px;letter-spacing:2px;">SCAN TRACKING</div>
+          <div style="font-size:22px;font-weight:900;color:var(--text);margin-bottom:6px;">扫码追踪 v3.0</div>
+          <div style="font-size:12px;color:var(--text3);">三角色各有其码，信任链完整可追溯可审计</div>
+        </div>
+
+        <!-- 三角色卡片 -->
+        <div class="grid3" style="margin-bottom:14px;">
+          <div class="card" style="border-color:rgba(245,200,66,0.3);background:rgba(245,200,66,0.04);text-align:center;padding:14px 8px;">
+            <div style="font-size:28px;margin-bottom:6px;">🎯</div>
+            <div class="badge b-gold" style="margin-bottom:6px;font-size:9px;">源点者</div>
+            <div style="font-size:11px;color:var(--text3);line-height:1.5;">第一次到店<br>锁定起源<br>ODR终身分红</div>
+          </div>
+          <div class="card" style="border-color:rgba(79,195,247,0.3);background:rgba(79,195,247,0.04);text-align:center;padding:14px 8px;">
+            <div style="font-size:28px;margin-bottom:6px;">💬</div>
+            <div class="badge b-blue" style="margin-bottom:6px;font-size:9px;">转化者</div>
+            <div style="font-size:11px;color:var(--text3);line-height:1.5;">首次成交<br>记录转化<br>60%权重TCU</div>
+          </div>
+          <div class="card" style="border-color:rgba(34,211,160,0.3);background:rgba(34,211,160,0.04);text-align:center;padding:14px 8px;">
+            <div style="font-size:28px;margin-bottom:6px;">🤝</div>
+            <div class="badge b-green" style="margin-bottom:6px;font-size:9px;">留存者</div>
+            <div style="font-size:11px;color:var(--text3);line-height:1.5;">每次服务<br>更新F_score<br>100%权重TCU</div>
+          </div>
+        </div>
+
+        <!-- 互动模拟扫码 -->
+        <div class="card card-glow">
+          <div class="ctitle"><span class="cdot" style="background:var(--blue);"></span>🎮 互动：模拟一次扫码记录</div>
+          <div class="role-sel">
+            <button class="rbtn ra-gold" onclick="setRole(this,'origin')" id="rs-origin">🎯 源点者</button>
+            <button class="rbtn" onclick="setRole(this,'convert')" id="rs-convert">💬 转化者</button>
+            <button class="rbtn" onclick="setRole(this,'retain')" id="rs-retain">🤝 留存者</button>
+          </div>
+          <div class="fg">
+            <div class="flabel">客户姓名</div>
+            <input type="text" id="sc-customer" value="陈总">
+          </div>
+          <div class="fg">
+            <div class="flabel">服务人员</div>
+            <input type="text" id="sc-person" value="王老师">
+          </div>
+          <div class="fg">
+            <div class="flabel">消费金额（元，选填）</div>
+            <input type="number" id="sc-amount" value="0" placeholder="0">
+          </div>
+          <div class="btn-row">
+            <button class="btn btn-primary" onclick="simScan()">📱 模拟扫码</button>
+            <button class="btn btn-outline btn-sm" onclick="clearScan()" style="flex:0 0 auto;width:auto;">清空</button>
+          </div>
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-top:12px;margin-bottom:6px;">
+            <span style="font-size:12px;font-weight:700;color:var(--text);">扫码记录 <span class="badge b-blue" id="scan-count">0</span></span>
+          </div>
+          <div id="scan-log" style="max-height:220px;overflow-y:auto;">
+            <div style="text-align:center;padding:16px;color:var(--text3);font-size:11px;">暂无记录，点击"模拟扫码"</div>
+          </div>
+        </div>
+
+        <!-- 信任追溯链示例 -->
+        <div class="card">
+          <div class="ctitle"><span class="cdot" style="background:var(--gold);"></span>客户"陈总"的完整信任追溯链</div>
+          <div class="tbl-wrap">
+            <table>
+              <thead><tr><th>环节</th><th>角色</th><th>人物</th><th>收益</th></tr></thead>
+              <tbody>
+                <tr><td>第一次到店·扫码</td><td><span class="badge b-gold">源点</span></td><td>王老师</td><td class="tc-gold">ODR 8%（终身）</td></tr>
+                <tr><td>首次成交 ¥40,000</td><td><span class="badge b-blue">转化</span></td><td>李明</td><td>10.5% = ¥4,200</td></tr>
+                <tr><td>第二次服务扫码</td><td><span class="badge b-green">留存</span></td><td>张姐</td><td>F_score +15分</td></tr>
+                <tr><td>复购 ¥20,000</td><td><span class="badge b-green">留存</span></td><td>张姐</td><td>11.2% = ¥2,240</td></tr>
+                <tr class="tc-me"><td>↳ ODR分红（源点）</td><td><span class="badge b-gold">源点</span></td><td>王老师</td><td class="tc-gold">ODR 8% = ¥1,600</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="hl hl-purple" style="font-size:11.5px;margin-top:10px;">
+            🔍 <strong>审计说明：</strong>每一笔收益都可追溯到具体扫码记录（时间戳+地理位置+操作人）。系统自动生成"信任追溯报告"，任何人可验证。
+          </div>
+        </div>
+
+        <!-- ODR 规则 -->
+        <div class="lp-card">
+          <div style="font-size:14px;font-weight:800;color:var(--gold);margin-bottom:10px;">📊 ODR 源点分红权</div>
+          <div class="formula">
+            <span class="fk">ODR比例</span> <span class="fop">=</span> <span class="fv">1%</span> <span class="fop">+</span> <span class="fv">14%</span> <span class="fop">×</span> <span class="fop">(</span>源点者TCU百分位 <span class="fop">/</span> <span class="fv">100</span><span class="fop">)</span>
+          </div>
+          <div class="grid3" style="margin-top:10px;gap:6px;">
+            <div style="text-align:center;padding:10px 6px;background:rgba(255,255,255,0.03);border-radius:8px;"><div style="font-size:18px;font-weight:900;color:var(--gold);">13.6%</div><div style="font-size:9px;color:var(--text3);">TCU前10%</div></div>
+            <div style="text-align:center;padding:10px 6px;background:rgba(255,255,255,0.03);border-radius:8px;"><div style="font-size:18px;font-weight:900;color:var(--purple2);">8.0%</div><div style="font-size:9px;color:var(--text3);">TCU前50%</div></div>
+            <div style="text-align:center;padding:10px 6px;background:rgba(255,255,255,0.03);border-radius:8px;"><div style="font-size:18px;font-weight:900;color:var(--text3);">2.4%</div><div style="font-size:9px;color:var(--text3);">TCU后90%</div></div>
+          </div>
+        </div>
+
+        <!-- 扫码规则表 -->
+        <div class="card">
+          <div class="ctitle"><span class="cdot" style="background:var(--green);"></span>规则说明</div>
+          <div class="tbl-wrap">
+            <table>
+              <thead><tr><th>扫码顺序</th><th>角色</th><th>收益机制</th></tr></thead>
+              <tbody>
+                <tr><td>第一次</td><td><span class="badge b-gold">源点者</span></td><td>ODR 1%-15%（终身）</td></tr>
+                <tr><td>第二次</td><td><span class="badge b-blue">转化者</span></td><td>直接提成 5%-15%</td></tr>
+                <tr><td>后续每次</td><td><span class="badge b-green">留存者</span></td><td>直接提成 + F积分</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div><!-- /scan -->
+
+    <!-- ================== TCU 2.0 ================== -->
+    <div class="page" id="page-tcu">
+      <div style="padding:8px 4px;">
+        <div style="text-align:center;padding:16px 0 20px;">
+          <div class="badge b-purple" style="margin-bottom:10px;font-size:11px;letter-spacing:2px;">TCU 2.0 · TRUST CAPITAL UNIT</div>
+          <div style="font-size:22px;font-weight:900;color:var(--text);margin-bottom:6px;">信任资本量化</div>
+          <div style="font-size:12px;color:var(--text3);line-height:1.6;">统一量纲：5维标准化合成PCU，融入角色权重计算</div>
+        </div>
+
+        <!-- PCU 说明卡 -->
+        <div class="card card-glow">
+          <div class="ctitle"><span class="cdot" style="background:var(--purple);box-shadow:0 0 8px var(--purple);"></span>🧬 PCU — 个人信任度（5维标准化）</div>
+          <div class="hl hl-purple">
+            所有维度先标准化到 <strong>0~1</strong> 同一量纲，再按权重合成 PCU。每个维度都反映"信任行为"的不同侧面。
+          </div>
+          <div class="formula">
+            <span class="fk">PCU</span> <span class="fop">=</span>
+            <span class="fv">0.30</span><span class="fop">×</span>留存率<sub>0~1</sub>
+            <span class="fop">+</span> <span class="fv">0.25</span><span class="fop">×</span>到店率<sub>0~1</sub>
+            <span class="fop">+</span> <span class="fv">0.25</span><span class="fop">×</span>转介绍率<sub>0~1</sub>
+            <span class="fop">+</span> <span class="fv">0.10</span><span class="fop">×</span>(1-投诉率)<sub>0~1</sub>
+            <span class="fop">+</span> <span class="fv">0.10</span><span class="fop">×</span>自消率<sub>0~1</sub><br><br>
+            <span class="fc">自消率标准化 = 本人月消费 ÷ (平台月均消费 × 3)，上限1</span><br>
+            <span class="fc">到店率标准化 = 月均到店次数 ÷ 5次，上限1</span>
+          </div>
+          <div style="margin-top:12px;">
+            <div class="pcu-item"><div class="pi-h"><span class="pi-name">🔒 留存率（核心）</span><span class="pi-score">权重 30%</span></div><div class="pi-track"><div class="pi-fill" style="width:30%;background:linear-gradient(90deg,var(--green),var(--gold));"></div></div></div>
+            <div class="pcu-item"><div class="pi-h"><span class="pi-name">📅 到店率</span><span class="pi-score">权重 25%</span></div><div class="pi-track"><div class="pi-fill" style="width:25%;background:linear-gradient(90deg,var(--purple),var(--blue));"></div></div></div>
+            <div class="pcu-item"><div class="pi-h"><span class="pi-name">👥 转介绍率</span><span class="pi-score">权重 25%</span></div><div class="pi-track"><div class="pi-fill" style="width:25%;background:linear-gradient(90deg,var(--blue),var(--purple));"></div></div></div>
+            <div class="pcu-item"><div class="pi-h"><span class="pi-name">✅ 投诉率（反向）</span><span class="pi-score">权重 10%</span></div><div class="pi-track"><div class="pi-fill" style="width:10%;background:var(--red);"></div></div></div>
+            <div class="pcu-item"><div class="pi-h"><span class="pi-name">💳 自消标准化</span><span class="pi-score">权重 10%</span></div><div class="pi-track"><div class="pi-fill" style="width:10%;background:var(--gold);"></div></div></div>
+          </div>
+        </div>
+
+        <!-- 完整公式说明 -->
+        <div class="card">
+          <div class="ctitle"><span class="cdot" style="background:var(--gold);"></span>📐 TCU 2.0 完整公式（统一量纲版）</div>
+          <div class="formula">
+            <span class="fc">① 计算 PCU（0~1，5维标准化）</span><br>
+            <span class="fk">PCU</span> <span class="fop">=</span> <span class="fv">5维加权合成（见上方）</span><br><br>
+            <span class="fc">② 计算实际角色权重</span><br>
+            <span class="fk">W_角色</span> <span class="fop">=</span> <span class="fv">基础权重</span> <span class="fop">×</span> <span class="fop">(</span><span class="fv">0.5 + 0.5 × PCU</span><span class="fop">)</span><br>
+            <span class="fc">（PCU=0时权重保底50%基础权重；PCU=1时=100%基础权重）</span><br><br>
+            <span class="fc">③ 计算单客户TCU贡献</span><br>
+            <span class="fk">TCU_k</span> <span class="fop">=</span> <span class="fv">W_角色</span> <span class="fop">×</span> <span class="fv">消费金额</span> <span class="fop">×</span> <span class="fv">τ</span><span class="fc">（产品系数）</span> <span class="fop">×</span> <span class="fv">A(t)</span><span class="fc">（衰减）</span><br><br>
+            <span class="fc">④ 汇总所有客户</span><br>
+            <span class="fk">TCU_total</span> <span class="fop">=</span> <span class="fv">Σ TCU_k</span><span class="fc">（所有角色，所有客户）</span>
+          </div>
+          <div class="hl hl-green" style="font-size:11.5px;">
+            <strong>量纲统一：</strong>消费金额（元）× 角色权重（无单位）× PCU（0~1）= 结果为"信任加权消费"，量纲一致，无混用。
+          </div>
+        </div>
+
+        <!-- 系数表 -->
+        <div class="grid2">
+          <div class="card">
+            <div style="font-size:13px;font-weight:800;color:var(--text);margin-bottom:8px;">产品线系数 τ</div>
+            <div class="tbl-wrap">
+              <table>
+                <thead><tr><th>产品线</th><th>τ</th></tr></thead>
+                <tbody>
+                  <tr><td>食品/保健品</td><td class="tc-gold">×1.0</td></tr>
+                  <tr><td>理疗/养生</td><td class="tc-gold">×1.5</td></tr>
+                  <tr><td>口腔/医疗</td><td class="tc-gold">×2.0</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div class="card">
+            <div style="font-size:13px;font-weight:800;color:var(--text);margin-bottom:8px;">时间衰减 A(t)</div>
+            <div class="tbl-wrap">
+              <table>
+                <thead><tr><th>距上次活跃</th><th>A(t)</th></tr></thead>
+                <tbody>
+                  <tr><td>≤30天</td><td class="tc-green">1.00</td></tr>
+                  <tr><td>31-60天</td><td style="color:var(--orange);">0.75</td></tr>
+                  <tr><td>61-90天</td><td style="color:var(--orange);">0.50</td></tr>
+                  <tr><td>91-180天</td><td style="color:var(--red);">0.25</td></tr>
+                  <tr><td>>180天</td><td style="color:var(--red);">0（清零）</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- TCU 2.0 计算器 -->
+        <div class="card card-glow">
+          <div class="ctitle"><span class="cdot" style="background:var(--purple);box-shadow:0 0 8px var(--purple);"></span>🔢 TCU 2.0 实时计算器</div>
+          <div style="font-size:12px;color:var(--text3);margin-bottom:14px;">输入5维PCU指标 + 消费信息，自动计算</div>
+
+          <div style="font-size:12px;font-weight:700;color:var(--purple2);margin-bottom:8px;">第一步：选择角色</div>
+          <div class="role-sel">
+            <button class="rbtn ra-gold" onclick="setCalcRole(this,'origin')" id="cr-origin">🎯 源点(10%)</button>
+            <button class="rbtn" onclick="setCalcRole(this,'convert')" id="cr-convert">💬 转化(60%)</button>
+            <button class="rbtn" onclick="setCalcRole(this,'retain')" id="cr-retain">🤝 留存(100%)</button>
+          </div>
+
+          <div style="font-size:12px;font-weight:700;color:var(--purple2);margin:12px 0 8px;">第二步：PCU 5维指标（→ 标准化后合成信任度）</div>
+
+          <div class="fg">
+            <div class="flabel">🔒 客户留存率 <span class="fval" id="v-retain">70%</span></div>
+            <input type="range" min="0" max="100" value="70" oninput="updatePCU('retain',this.value)">
+          </div>
+          <div class="fg">
+            <div class="flabel">📅 月均到店次数（上限5次） <span class="fval" id="v-visit">2.5次</span></div>
+            <input type="range" min="0" max="50" value="25" oninput="updatePCU('visit',this.value)">
+          </div>
+          <div class="fg">
+            <div class="flabel">👥 转介绍率（新客/服务客） <span class="fval" id="v-refer">20%</span></div>
+            <input type="range" min="0" max="100" value="20" oninput="updatePCU('refer',this.value)">
+          </div>
+          <div class="fg">
+            <div class="flabel">✅ 投诉率（越低越好） <span class="fval" id="v-complain">2%</span></div>
+            <input type="range" min="0" max="20" value="2" oninput="updatePCU('complain',this.value)">
+          </div>
+          <div class="fg">
+            <div class="flabel">💳 本人月消费（元） <span class="fval" id="v-selfcon">¥2,000</span></div>
+            <input type="range" min="0" max="15000" value="2000" oninput="updatePCU('selfcon',this.value)">
+          </div>
+
+          <!-- PCU 结果 -->
+          <div style="background:rgba(138,110,255,0.08);border:1px solid rgba(138,110,255,0.2);border-radius:var(--radius-sm);padding:14px;margin-bottom:14px;">
+            <div style="font-size:11px;color:var(--text3);margin-bottom:6px;">PCU 5维分解</div>
+            <div id="pcu-breakdown" style="font-size:11px;color:var(--text2);line-height:1.9;font-family:var(--mono);"></div>
+            <div class="divider"></div>
+            <div style="display:flex;justify-content:space-between;align-items:center;">
+              <div style="font-size:12px;font-weight:700;color:var(--text);">PCU 综合信任度</div>
+              <div style="font-size:26px;font-weight:900;color:var(--purple2);" id="pcu-score">0.68</div>
+            </div>
+            <div style="height:7px;background:rgba(255,255,255,0.06);border-radius:4px;margin-top:6px;overflow:hidden;">
+              <div id="pcu-bar" style="height:100%;background:linear-gradient(90deg,var(--purple),var(--gold));border-radius:4px;transition:width .5s;width:68%;"></div>
+            </div>
+          </div>
+
+          <div style="font-size:12px;font-weight:700;color:var(--purple2);margin-bottom:8px;">第三步：消费金额与产品线</div>
+
+          <div class="fg">
+            <div class="flabel">消费金额（元）</div>
+            <input type="number" id="calc-amount" value="10000" oninput="calcTCU()">
+          </div>
+          <div class="fg">
+            <div class="flabel">产品线信任系数 τ</div>
+            <select id="calc-product" onchange="calcTCU()">
+              <option value="1.0">食品/保健品 × 1.0</option>
+              <option value="1.5">理疗/养生 × 1.5</option>
+              <option value="2.0" selected>口腔/医疗 × 2.0</option>
+            </select>
+          </div>
+          <div class="fg">
+            <div class="flabel">时间衰减 A(t)</div>
+            <select id="calc-decay" onchange="calcTCU()">
+              <option value="1.0">≤30天（1.0）</option>
+              <option value="0.75">31-60天（0.75）</option>
+              <option value="0.5">61-90天（0.5）</option>
+              <option value="0.25">91-180天（0.25）</option>
+            </select>
+          </div>
+
+          <!-- TCU 结果 -->
+          <div style="background:linear-gradient(135deg,rgba(245,200,66,0.1),rgba(138,110,255,0.07));border:1px solid rgba(245,200,66,0.25);border-radius:var(--radius-sm);padding:18px 14px;margin-top:4px;">
+            <div style="font-size:11px;color:var(--text3);margin-bottom:10px;font-family:var(--mono);line-height:1.8;" id="tcu-formula-display"></div>
+            <div class="divider"></div>
+            <div style="text-align:center;">
+              <div style="font-size:11px;color:var(--text3);margin-bottom:4px;">本次客户 TCU 贡献</div>
+              <div class="rnum rnum-gold" id="tcu-result">1,200</div>
+              <div style="font-size:10px;color:var(--text3);margin-top:4px;">TCU 积分</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div><!-- /tcu -->
+
+    <!-- ================== 提成引擎 ================== -->
+    <div class="page" id="page-commission">
+      <div style="padding:8px 4px;">
+        <div style="text-align:center;padding:16px 0 20px;">
+          <div class="badge b-gold" style="margin-bottom:10px;font-size:11px;letter-spacing:2px;">COMMISSION ENGINE</div>
+          <div style="font-size:22px;font-weight:900;color:var(--text);margin-bottom:6px;">提成引擎 · 四条收入线</div>
+          <div style="font-size:12px;color:var(--text3);">直接提成、追溯提成、ODR分红、F积分——四线独立计算</div>
+        </div>
+
+        <!-- 四条收入线定义 -->
+        <div class="card">
+          <div class="ctitle"><span class="cdot" style="background:var(--gold);"></span>四条收入线（正确定义）</div>
+          <div class="sf">
+            <div class="sfi">
+              <div class="sfn sfn-g">①</div>
+              <div>
+                <div class="sft">直接提成（本人直接服务客户消费额）</div>
+                <div class="sfd">基础是你<strong>亲自服务</strong>的客户消费额，不包括下级服务的客户</div>
+                <div class="formula" style="font-size:11px;margin-top:6px;">
+                  <span class="fk">直接提成</span> <span class="fop">=</span> <span class="fv">本人服务消费额</span> <span class="fop">×</span> <span class="fop">[</span><span class="fv">5% + 10% × (TCU百分位/100)</span><span class="fop">]</span>
+                </div>
+              </div>
+            </div>
+            <div class="sfi">
+              <div class="sfn sfn-p">②</div>
+              <div>
+                <div class="sft">二级追溯（从下级已拿到的提成里分50%）</div>
+                <div class="sfd">基础是下级<strong>已拿到的提成金额</strong>，不是下级销售额</div>
+                <div class="formula" style="font-size:11px;margin-top:6px;">
+                  <span class="fk">二级追溯</span> <span class="fop">=</span> <span class="fv">Σ(下级直接提成金额)</span> <span class="fop">×</span> <span class="fv">50%</span>
+                </div>
+                <div class="hl hl-red" style="font-size:11px;margin-top:6px;">⚠️ 旧版错误：下级销售额×比例。✅ 正确：下级提成金额×50%</div>
+              </div>
+            </div>
+            <div class="sfi">
+              <div class="sfn sfn-p">③</div>
+              <div>
+                <div class="sft">三级追溯（从下下级的提成里分25%）</div>
+                <div class="sfd">四级及以上截断，防止无限层级</div>
+                <div class="formula" style="font-size:11px;margin-top:6px;">
+                  <span class="fk">三级追溯</span> <span class="fop">=</span> <span class="fv">Σ(三级直接提成金额)</span> <span class="fop">×</span> <span class="fv">25%</span>
+                </div>
+              </div>
+            </div>
+            <div class="sfi">
+              <div class="sfn sfn-gr">④</div>
+              <div>
+                <div class="sft">ODR源点分红（终身，独立于提成体系）</div>
+                <div class="sfd">所有源点客户消费额 × ODR比例（由TCU百分位决定）</div>
+                <div class="formula" style="font-size:11px;margin-top:6px;">
+                  <span class="fk">ODR收益</span> <span class="fop">=</span> <span class="fv">Σ(源点客户消费额)</span> <span class="fop">×</span> <span class="fop">[</span><span class="fv">1% + 14% × (TCU百分位/100)</span><span class="fop">]</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 百分位演示 -->
+        <div class="card">
+          <div class="ctitle"><span class="cdot" style="background:var(--purple);"></span>百分位滑动提成演示</div>
+          <div class="fg">
+            <div class="flabel">我的TCU百分位排名 <span class="fval" id="percentile-val">50%</span></div>
+            <input type="range" min="0" max="100" value="50" oninput="updatePercentile(this.value)">
+          </div>
+          <div class="grid2">
+            <div class="rbox rbox-gold">
+              <div class="rnum rnum-gold" id="comm-rate">10.0%</div>
+              <div class="rlabel">直接提成比例</div>
+            </div>
+            <div class="rbox" style="border-color:rgba(79,195,247,0.3);background:var(--blue-dim);">
+              <div class="rnum" style="background:linear-gradient(135deg,var(--blue),var(--purple));-webkit-background-clip:text;-webkit-text-fill-color:transparent;" id="odr-rate">8.0%</div>
+              <div class="rlabel">ODR源点分红比例</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 月收入计算器 -->
+        <div class="card card-gold">
+          <div class="ctitle"><span class="cdot" style="background:var(--gold);box-shadow:0 0 8px var(--gold);"></span>💰 完整月收入计算器</div>
+          <div style="font-size:11.5px;color:var(--text3);margin-bottom:14px;">四条收入线分开计算，透明可验证</div>
+
+          <div class="fg">
+            <div class="flabel">我的TCU百分位排名（全系统）</div>
+            <input type="range" min="1" max="99" value="40" id="income-percentile" oninput="updateIncome()">
+            <div style="display:flex;justify-content:space-between;font-size:10px;color:var(--text3);margin-top:2px;"><span>0%（末位）</span><span id="income-pct-label">前 60%</span><span>100%（首位）</span></div>
+          </div>
+
+          <div class="fg">
+            <div class="flabel">本月本人直接服务消费额（元）</div>
+            <input type="number" id="i-direct" value="100000" oninput="updateIncome()">
+          </div>
+
+          <div style="font-size:12px;font-weight:700;color:var(--text2);margin-bottom:8px;">二级团队（直接下级）</div>
+          <div class="grid2" style="margin-bottom:8px;">
+            <div class="fg" style="margin-bottom:0;">
+              <div class="flabel">二级人员数</div>
+              <input type="number" id="i-l2-count" value="5" min="0" max="50" oninput="updateIncome()">
+            </div>
+            <div class="fg" style="margin-bottom:0;">
+              <div class="flabel">人均直接提成（元）</div>
+              <input type="number" id="i-l2-comm" value="3000" oninput="updateIncome()">
+            </div>
+          </div>
+
+          <div style="font-size:12px;font-weight:700;color:var(--text2);margin:8px 0;">三级团队（下级的下级）</div>
+          <div class="grid2" style="margin-bottom:8px;">
+            <div class="fg" style="margin-bottom:0;">
+              <div class="flabel">三级人员数</div>
+              <input type="number" id="i-l3-count" value="8" min="0" max="100" oninput="updateIncome()">
+            </div>
+            <div class="fg" style="margin-bottom:0;">
+              <div class="flabel">人均直接提成（元）</div>
+              <input type="number" id="i-l3-comm" value="1500" oninput="updateIncome()">
+            </div>
+          </div>
+
+          <div class="fg">
+            <div class="flabel">本月源点客户消费总额（元）</div>
+            <input type="number" id="i-odr-base" value="50000" oninput="updateIncome()">
+          </div>
+
+          <div id="income-result" style="margin-top:14px;"></div>
+
+          <button class="btn btn-outline" style="margin-top:10px;width:100%;font-size:12px;" onclick="showComparison()">📊 与"传统上级"对比 — 验证下级可超上级</button>
+          <div id="comparison-result" style="margin-top:10px;"></div>
+        </div>
+      </div>
+    </div><!-- /commission -->
+
+    <!-- ================== 我的总览 ================== -->
+    <div class="page" id="page-overview">
+      <div style="padding:8px 4px;">
+        <div style="text-align:center;padding:16px 0 20px;">
+          <div class="badge b-purple" style="margin-bottom:10px;font-size:11px;letter-spacing:2px;">MY OVERVIEW</div>
+          <div style="font-size:22px;font-weight:900;color:var(--text);margin-bottom:6px;">我的 TCU 总览</div>
+          <div style="font-size:12px;color:var(--text3);">分层聚合 + 全系统排名 + 防作弊审计</div>
+        </div>
+
+        <!-- 档案卡 -->
+        <div class="lp-card">
+          <div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap;">
+            <div style="width:56px;height:56px;border-radius:50%;background:linear-gradient(135deg,var(--purple),var(--gold));display:flex;align-items:center;justify-content:center;font-size:24px;flex-shrink:0;box-shadow:0 0 20px rgba(138,110,255,0.4);">👤</div>
+            <div style="flex:1;">
+              <div style="font-size:16px;font-weight:900;color:var(--text);">我的 TCU 档案</div>
+              <div style="font-size:11px;color:var(--text3);">实时数据 · 每月1日重算排名</div>
+            </div>
+            <div style="text-align:right;">
+              <div style="font-size:30px;font-weight:900;color:var(--gold);" id="overview-tcu">12,620</div>
+              <div style="font-size:10px;color:var(--text3);">总TCU积分</div>
+            </div>
+          </div>
+          <div class="divider"></div>
+          <div class="grid3">
+            <div style="text-align:center;">
+              <div style="font-size:18px;font-weight:800;color:var(--purple2);" id="overview-rank">前 23%</div>
+              <div style="font-size:10px;color:var(--text3);">全系统百分位</div>
+            </div>
+            <div style="text-align:center;">
+              <div style="font-size:18px;font-weight:800;color:var(--green);" id="overview-commrate">10.7%</div>
+              <div style="font-size:10px;color:var(--text3);">直接提成比例</div>
+            </div>
+            <div style="text-align:center;">
+              <div style="font-size:18px;font-weight:800;color:var(--blue);" id="overview-odrate">4.3%</div>
+              <div style="font-size:10px;color:var(--text3);">ODR分红比例</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- TCU 分层聚合 -->
+        <div class="card">
+          <div class="ctitle"><span class="cdot" style="background:var(--blue);"></span>TCU 分层聚合公式</div>
+          <div style="font-size:11.5px;color:var(--text3);margin-bottom:10px;">我的总TCU = 本人直接 + 二级×100% + 三级×30%</div>
+          <div class="formula" style="margin-bottom:12px;">
+            <span class="fk">我的总TCU</span> <span class="fop">=</span> <span class="fv">本人直接TCU</span>
+            <span class="fop">+</span> <span class="fv">Σ(二级TCU × 100%)</span>
+            <span class="fop">+</span> <span class="fv">Σ(三级TCU × 30%)</span>
+          </div>
+          <div class="ib"><div class="ib-h"><span class="ib-lbl">本人直接TCU</span><span class="ib-val" id="ov-direct">4,200</span></div><div class="ib-track"><div class="ib-fill" id="ov-direct-bar" style="width:33%;background:linear-gradient(90deg,var(--gold),#e0a800);"></div></div></div>
+          <div class="ib"><div class="ib-h"><span class="ib-lbl">二级人员TCU（×100%）</span><span class="ib-val" id="ov-l2">6,800</span></div><div class="ib-track"><div class="ib-fill" id="ov-l2-bar" style="width:54%;background:linear-gradient(90deg,var(--purple),#6a4cf5);"></div></div></div>
+          <div class="ib"><div class="ib-h"><span class="ib-lbl">三级人员TCU（×30%）</span><span class="ib-val" id="ov-l3">1,620</span></div><div class="ib-track"><div class="ib-fill" id="ov-l3-bar" style="width:13%;background:linear-gradient(90deg,var(--blue),#0288d1);"></div></div></div>
+
+          <div class="divider"></div>
+          <div style="font-size:12px;font-weight:700;color:var(--text2);margin-bottom:8px;">🎮 输入你的实际数据</div>
+          <div class="fg"><div class="flabel">本人直接TCU</div><input type="number" id="ov-i-direct" value="4200" oninput="updateOverview()"></div>
+          <div class="fg"><div class="flabel">二级人员TCU总和</div><input type="number" id="ov-i-l2" value="6800" oninput="updateOverview()"></div>
+          <div class="fg"><div class="flabel">三级人员TCU总和</div><input type="number" id="ov-i-l3" value="5400" oninput="updateOverview()"></div>
+          <div class="fg"><div class="flabel">全系统人员总数</div><input type="number" id="ov-i-total" value="1000" oninput="updateOverview()"></div>
+          <button class="btn btn-primary btn-sm" onclick="updateOverview()">🔄 重新计算</button>
+        </div>
+
+        <!-- 排名审计 -->
+        <div class="card">
+          <div class="ctitle"><span class="cdot" style="background:var(--green);"></span>🔍 排名审计（防作弊）</div>
+          <div style="font-size:11.5px;color:var(--text3);margin-bottom:10px;">系统公开每个排名"前后各2人"的真实TCU，任何人可验证</div>
+          <div id="audit-table"></div>
+        </div>
+
+        <!-- 角色涌现 -->
+        <div class="card">
+          <div class="ctitle"><span class="cdot" style="background:var(--purple);"></span>🌱 角色涌现状态</div>
+          <div id="role-emergence"></div>
+        </div>
+      </div>
+    </div><!-- /overview -->
+
+    <!-- ================== LP 体系 ================== -->
+    <div class="page" id="page-lp">
+      <div style="padding:8px 4px;">
+        <div style="text-align:center;padding:16px 0 20px;">
+          <div class="badge b-gold" style="margin-bottom:10px;font-size:11px;letter-spacing:2px;">LP ECOSYSTEM</div>
+          <div style="font-size:22px;font-weight:900;color:var(--text);margin-bottom:6px;">LP 股东体系</div>
+          <div style="font-size:12px;color:var(--text3);">有限合伙并表 · 五条收入线 · 让每个优秀参与者成为股东</div>
+        </div>
+
+        <!-- 公司架构 -->
+        <div class="card">
+          <div class="ctitle"><span class="cdot" style="background:var(--purple);"></span>🏛️ 公司架构</div>
+          <div style="display:flex;flex-direction:column;gap:8px;">
+            <div style="padding:12px;background:linear-gradient(135deg,rgba(138,110,255,0.12),rgba(245,200,66,0.06));border-radius:var(--radius-sm);border:1px solid rgba(138,110,255,0.2);text-align:center;">
+              <div class="badge b-purple" style="margin-bottom:5px;">母公司</div>
+              <div style="font-size:14px;font-weight:800;color:var(--text);">口腔研究院</div>
+              <div style="font-size:10px;color:var(--text3);">品牌 · 技术 · 标准输出</div>
+            </div>
+            <div style="text-align:center;color:var(--text3);font-size:16px;">↓ 100%控股</div>
+            <div style="padding:12px;background:rgba(79,195,247,0.05);border-radius:var(--radius-sm);border:1px solid rgba(79,195,247,0.2);text-align:center;">
+              <div class="badge b-blue" style="margin-bottom:5px;">GP 管理公司</div>
+              <div style="font-size:14px;font-weight:800;color:var(--text);">运营管理中心（防火墙）</div>
+              <div style="font-size:10px;color:var(--text3);">管理费：各区域利润的5%</div>
+            </div>
+            <div style="text-align:center;color:var(--text3);font-size:16px;">↓ 管理</div>
+            <div style="padding:12px;background:rgba(245,200,66,0.05);border-radius:var(--radius-sm);border:1px solid rgba(245,200,66,0.2);text-align:center;">
+              <div class="badge b-gold" style="margin-bottom:5px;">LP 有限合伙公司（各区域）</div>
+              <div style="font-size:14px;font-weight:800;color:var(--text);">区域合伙人持股公司</div>
+              <div style="font-size:10px;color:var(--text3);">GP持股10% · LP持股90%</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- LP 资格条件 -->
+        <div class="card">
+          <div class="ctitle"><span class="cdot" style="background:var(--gold);"></span>LP 股东资格（三要素加权）</div>
+          <div class="formula">
+            <span class="fk">并表权重</span> <span class="fop">=</span>
+            <span class="fv">TCU排名权重</span> <span class="fop">×</span> <span class="fv">60%</span>
+            <span class="fop">+</span> <span class="fv">投资额权重</span> <span class="fop">×</span> <span class="fv">30%</span>
+            <span class="fop">+</span> <span class="fv">团队规模权重</span> <span class="fop">×</span> <span class="fv">10%</span>
+          </div>
+          <div class="hl hl-gold" style="font-size:12px;margin-top:10px;">
+            并表权重 ≥ 0.5 → 具备 LP 股东申请资格<br>
+            TCU贡献权重最大（60%）：TCU越高，并表权重越大
+          </div>
+        </div>
+
+        <!-- LP 计算器 -->
+        <div class="card card-glow">
+          <div class="ctitle"><span class="cdot" style="background:var(--gold);box-shadow:0 0 8px var(--gold);"></span>🏛️ LP 资格计算器</div>
+          <div class="fg">
+            <div class="flabel">我的TCU百分位 <span class="fval" id="lp-tcu-label">前70%</span></div>
+            <input type="range" min="1" max="99" value="30" id="lp-tcu" oninput="calcLP()">
+          </div>
+          <div class="fg">
+            <div class="flabel">累计投资额（万元）</div>
+            <input type="number" id="lp-invest" value="50" min="0" max="500" oninput="calcLP()">
+          </div>
+          <div class="fg">
+            <div class="flabel">团队规模（二级人员数）</div>
+            <input type="number" id="lp-team" value="10" min="0" max="100" oninput="calcLP()">
+          </div>
+          <div id="lp-result"></div>
+        </div>
+
+        <!-- 五条收入线 -->
+        <div class="card">
+          <div class="ctitle"><span class="cdot" style="background:var(--green);"></span>LP 股东五条收入线</div>
+          <div class="sf">
+            <div class="sfi"><div class="sfn sfn-g">①</div><div><div class="sft">直接提成（5%-15%）</div><div class="sfd">本人直接服务客户消费额 × 提成比例</div></div></div>
+            <div class="sfi"><div class="sfn sfn-p">②</div><div><div class="sft">二级追溯提成（×50%）</div><div class="sfd">下级直接提成金额 × 50%</div></div></div>
+            <div class="sfi"><div class="sfn sfn-p">③</div><div><div class="sft">三级追溯提成（×25%）</div><div class="sfd">三级直接提成金额 × 25%</div></div></div>
+            <div class="sfi"><div class="sfn sfn-gr">④</div><div><div class="sft">ODR 源点终身分红（1%-15%）</div><div class="sfd">源点客户消费额 × ODR比例</div></div></div>
+            <div class="sfi" style="padding-bottom:0;"><div class="sfn sfn-b">⑤</div><div><div class="sft">LP 利润分红（60%利润池按权重分）</div><div class="sfd">区域利润池 × LP并表权重（多劳多得）</div></div></div>
+          </div>
+        </div>
+
+        <!-- 七大权益 -->
+        <div class="card">
+          <div class="ctitle"><span class="cdot" style="background:var(--purple2);"></span>LP 股东七大权益</div>
+          <div class="tbl-wrap">
+            <table>
+              <thead><tr><th>权益</th><th>说明</th></tr></thead>
+              <tbody>
+                <tr><td><span class="badge b-gold">①</span> 利润分红权</td><td>按并表权重分配60%利润池</td></tr>
+                <tr><td><span class="badge b-purple">②</span> 优先清算权</td><td>退出时优先保障本金</td></tr>
+                <tr><td><span class="badge b-green">③</span> 知情监督权</td><td>查看全部财务报表</td></tr>
+                <tr><td><span class="badge b-blue">④</span> 品牌使用权</td><td>区域独家品牌授权</td></tr>
+                <tr><td><span class="badge b-gold">⑤</span> 扩区优先权</td><td>新区域优先认购</td></tr>
+                <tr><td><span class="badge b-purple">⑥</span> 技术共享权</td><td>共享母公司研发成果</td></tr>
+                <tr><td><span class="badge b-green">⑦</span> 退出保护权</td><td>三年锁定期后可转让</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div><!-- /lp -->
+
+  </div><!-- /content -->
+
+  <!-- BOTTOM NAV -->
+  <nav class="bottom-nav">
+    <button class="bnav active" onclick="goPage('home',this)" id="bnav-home"><span class="bico">🏠</span>首页</button>
+    <button class="bnav" onclick="goPage('theorems',this)" id="bnav-theorems"><span class="bico">📜</span>定理</button>
+    <button class="bnav" onclick="goPage('scan',this)" id="bnav-scan"><span class="bico">📱</span>扫码</button>
+    <button class="bnav" onclick="goPage('tcu',this)" id="bnav-tcu"><span class="bico">🧮</span>TCU</button>
+    <button class="bnav" onclick="goPage('commission',this)" id="bnav-commission"><span class="bico">💰</span>提成</button>
+    <button class="bnav" onclick="goPage('overview',this)" id="bnav-overview"><span class="bico">👤</span>总览</button>
+    <button class="bnav" onclick="goPage('lp',this)" id="bnav-lp"><span class="bico">🏛️</span>LP</button>
+  </nav>
+</div><!-- /app -->
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<script>
+// ===== PARTICLES =====
+(function(){
+  const canvas = document.getElementById('appCanvas');
+  if(!canvas) return;
+  const ctx = canvas.getContext('2d');
+  let W, H;
+  function resize(){W=canvas.width=window.innerWidth;H=canvas.height=window.innerHeight;}
+  resize();
+  window.addEventListener('resize',resize);
+  const particles = [];
+  for(let i=0;i<25;i++){
+    particles.push({
+      x: Math.random()*window.innerWidth,
+      y: Math.random()*window.innerHeight,
+      r: Math.random()*2+0.5,
+      vx: (Math.random()-0.5)*0.4,
+      vy: -(Math.random()*0.5+0.2),
+      alpha: Math.random()*0.5+0.1,
+      color: ['138,110,255','245,200,66','34,211,160'][Math.floor(Math.random()*3)]
+    });
+  }
+  function draw(){
+    ctx.clearRect(0,0,W,H);
+    particles.forEach(p=>{
+      p.x+=p.vx; p.y+=p.vy;
+      if(p.y<-10) p.y=H+10;
+      if(p.x<-10) p.x=W+10;
+      if(p.x>W+10) p.x=-10;
+      ctx.beginPath();
+      ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+      ctx.fillStyle=`rgba(${p.color},${p.alpha})`;
+      ctx.fill();
+    });
+    requestAnimationFrame(draw);
+  }
+  draw();
+})();
+
+// ===== CLOCK =====
+function updateClock(){
+  const d=new Date();
+  const h=d.getHours().toString().padStart(2,'0');
+  const m=d.getMinutes().toString().padStart(2,'0');
+  const el=document.getElementById('clock');
+  if(el) el.textContent=h+':'+m;
+}
+setInterval(updateClock,1000);
+updateClock();
+
+// ===== PAGE NAVIGATION =====
+let currentPage = 'home';
+function goPage(page, btn){
+  if(currentPage===page) return;
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.tnav').forEach(b=>b.classList.remove('active'));
+  document.querySelectorAll('.bnav').forEach(b=>b.classList.remove('active'));
+  const pageEl = document.getElementById('page-'+page);
+  if(pageEl) pageEl.classList.add('active');
+  if(btn) btn.classList.add('active');
+  const bnav = document.getElementById('bnav-'+page);
+  if(bnav) bnav.classList.add('active');
+  currentPage = page;
+  document.getElementById('content').scrollTop=0;
+  // sync both navs
+  document.querySelectorAll('.tnav').forEach(b=>{
+    const onclick = b.getAttribute('onclick');
+    if(onclick && onclick.includes("'"+page+"'")) b.classList.add('active');
+  });
+}
+
+// ===== THEOREM TOGGLE =====
+function toggleTh(card){
+  const wasOpen = card.classList.contains('open');
+  document.querySelectorAll('.th-card').forEach(c=>c.classList.remove('open'));
+  if(!wasOpen) card.classList.add('open');
+}
+
+// ===== SCAN SIMULATION =====
+let scanRole = 'origin';
+let scanCount = 0;
+const roleConfig = {
+  origin: {label:'🎯 源点者',cls:'origin',color:getComputedStyle(document.documentElement).getPropertyValue('--gold').trim()||'#f5c842',desc:'信任起源永久锁定，获得 ODR 源点分红权（1%-15%）'},
+  convert: {label:'💬 转化者',cls:'converter',color:'#4fc3f7',desc:'首次成交扫码，获得60%权重TCU积分和直接提成'},
+  retain: {label:'🤝 留存者',cls:'retainer',color:'#22d3a0',desc:'服务扫码记录，更新F积分，获得100%权重TCU'}
+};
+
+function setRole(btn,role){
+  scanRole=role;
+  ['origin','convert','retain'].forEach(r=>{
+    const b=document.getElementById('rs-'+r);
+    if(b){b.className='rbtn';if(r==='origin')b.classList.add('ra-gold');else if(r==='convert')b.classList.add('ra-blue');else b.classList.add('ra-green');}
+  });
+  document.querySelectorAll('#rs-origin,#rs-convert,#rs-retain').forEach(b=>b.className='rbtn');
+  if(role==='origin') document.getElementById('rs-origin').className='rbtn ra-gold';
+  else if(role==='convert') document.getElementById('rs-convert').className='rbtn ra-blue';
+  else document.getElementById('rs-retain').className='rbtn ra-green';
+}
+
+function simScan(){
+  const customer = document.getElementById('sc-customer')?.value||'陈总';
+  const person = document.getElementById('sc-person')?.value||'王老师';
+  const amount = parseFloat(document.getElementById('sc-amount')?.value)||0;
+  const r = roleConfig[scanRole];
+  const now = new Date();
+  const timeStr = now.getHours().toString().padStart(2,'0')+':'+now.getMinutes().toString().padStart(2,'0')+':'+now.getSeconds().toString().padStart(2,'0');
+  scanCount++;
+  const el = document.createElement('div');
+  el.className = 'scan-entry '+r.cls;
+  el.innerHTML=`<div class="se-h"><span class="badge" style="background:rgba(255,255,255,0.06);color:${r.color};font-size:10px;">${r.label}</span><span class="se-time">${timeStr}</span></div><div class="se-body"><strong>${person}</strong> 扫码为客户 <strong>${customer}</strong> 记录${r.label.replace(/[🎯💬🤝]/g,'').trim()}行为${amount>0?'，消费 ¥'+amount.toLocaleString():''}。<br><span style="color:var(--text3);font-size:11px;">${r.desc}</span></div>`;
+  const log = document.getElementById('scan-log');
+  if(log){
+    if(log.querySelector('div[style]')) log.innerHTML='';
+    log.insertBefore(el,log.firstChild);
+  }
+  const cnt = document.getElementById('scan-count');
+  if(cnt) cnt.textContent = scanCount;
+  showToast('✅ '+r.label+' · '+customer+' · '+person);
+}
+
+function clearScan(){
+  scanCount=0;
+  const log=document.getElementById('scan-log');
+  if(log) log.innerHTML='<div style="text-align:center;padding:16px;color:var(--text3);font-size:11px;">暂无记录，点击"模拟扫码"</div>';
+  const cnt=document.getElementById('scan-count');
+  if(cnt) cnt.textContent='0';
+}
+
+// ===== PCU STATE =====
+const pcuState={retain:70,visit:25,refer:20,complain:2,selfcon:2000};
+let calcRole='origin';
+const baseWeights={origin:0.10,convert:0.60,retain:1.00};
+let pcuValue=0.68;
+const PLATFORM_AVG=5000;
+
+function updatePCU(key,val){
+  const v=parseFloat(val);
+  if(key==='visit') pcuState.visit=v;
+  else if(key==='retain') pcuState.retain=v;
+  else if(key==='refer') pcuState.refer=v;
+  else if(key==='complain') pcuState.complain=v;
+  else if(key==='selfcon') pcuState.selfcon=v;
+
+  const labels={
+    'v-retain': pcuState.retain.toFixed(0)+'%',
+    'v-visit': (pcuState.visit/10).toFixed(1)+'次',
+    'v-refer': pcuState.refer.toFixed(0)+'%',
+    'v-complain': pcuState.complain.toFixed(1)+'%',
+    'v-selfcon': '¥'+pcuState.selfcon.toLocaleString()
+  };
+  for(const[id,text] of Object.entries(labels)){const el=document.getElementById(id);if(el)el.textContent=text;}
+
+  const cap=PLATFORM_AVG*3;
+  const retainNorm=Math.min(pcuState.retain/100,1);
+  const visitNorm=Math.min(pcuState.visit/50,1);
+  const referNorm=Math.min(pcuState.refer/100,1);
+  const complainNorm=Math.max(0,1-pcuState.complain/20);
+  const selfconNorm=Math.min(pcuState.selfcon/cap,1);
+
+  pcuValue=0.30*retainNorm+0.25*visitNorm+0.25*referNorm+0.10*complainNorm+0.10*selfconNorm;
+
+  const bd=document.getElementById('pcu-breakdown');
+  if(bd) bd.innerHTML=
+    `留存率 ${(retainNorm*100).toFixed(0)}% → <span style="color:var(--gold)">${(0.30*retainNorm).toFixed(3)}</span> (30%权重)<br>`+
+    `到店率 ${(visitNorm*100).toFixed(0)}% → <span style="color:var(--gold)">${(0.25*visitNorm).toFixed(3)}</span> (25%权重)<br>`+
+    `转介绍率 ${(referNorm*100).toFixed(0)}% → <span style="color:var(--gold)">${(0.25*referNorm).toFixed(3)}</span> (25%权重)<br>`+
+    `(1-投诉率) ${(complainNorm*100).toFixed(0)}% → <span style="color:var(--gold)">${(0.10*complainNorm).toFixed(3)}</span> (10%权重)<br>`+
+    `自消率 ${(selfconNorm*100).toFixed(0)}% → <span style="color:var(--gold)">${(0.10*selfconNorm).toFixed(3)}</span> (10%权重)`;
+
+  const scoreEl=document.getElementById('pcu-score');
+  if(scoreEl) animateNum(scoreEl,pcuValue,3);
+  const barEl=document.getElementById('pcu-bar');
+  if(barEl) barEl.style.width=(pcuValue*100).toFixed(1)+'%';
+
+  calcTCU();
+}
+
+function setCalcRole(btn,role){
+  calcRole=role;
+  ['origin','convert','retain'].forEach(r=>{
+    const b=document.getElementById('cr-'+r);
+    if(b) b.className='rbtn';
+  });
+  if(role==='origin') btn.className='rbtn ra-gold';
+  else if(role==='convert') btn.className='rbtn ra-blue';
+  else btn.className='rbtn ra-green';
+  calcTCU();
+}
+
+function calcTCU(){
+  const amount=parseFloat(document.getElementById('calc-amount')?.value)||10000;
+  const tau=parseFloat(document.getElementById('calc-product')?.value)||2.0;
+  const decay=parseFloat(document.getElementById('calc-decay')?.value)||1.0;
+  const bw=baseWeights[calcRole];
+  const actualW=bw*(0.5+0.5*pcuValue);
+  const tcu=actualW*amount*tau*decay;
+
+  const fd=document.getElementById('tcu-formula-display');
+  if(fd) fd.innerHTML=
+    `角色基础权重 ${(bw*100).toFixed(0)}% × (0.5 + 0.5×${pcuValue.toFixed(3)}) = <span style="color:var(--gold);font-weight:700;">${(actualW*100).toFixed(2)}%</span><br>`+
+    `TCU = ${(actualW*100).toFixed(2)}% × ¥${amount.toLocaleString()} × τ${tau} × A(t)${decay}`;
+
+  const resultEl=document.getElementById('tcu-result');
+  if(resultEl) animateNum(resultEl,tcu,0);
+}
+
+// ===== NUMBER ANIMATION =====
+function animateNum(el,target,decimals){
+  const start=parseFloat(el.textContent.replace(/,/g,'').replace('%',''))||0;
+  const duration=500;
+  const t0=performance.now();
+  function step(now){
+    const prog=Math.min((now-t0)/duration,1);
+    const ease=1-Math.pow(1-prog,3);
+    const cur=start+(target-start)*ease;
+    el.textContent=cur.toLocaleString('zh-CN',{maximumFractionDigits:decimals,minimumFractionDigits:decimals});
+    if(prog<1) requestAnimationFrame(step);
+  }
+  requestAnimationFrame(step);
+}
+
+// ===== PERCENTILE =====
+function updatePercentile(val){
+  const v=parseFloat(val);
+  document.getElementById('percentile-val').textContent=v+'%';
+  const commRate=5+10*(v/100);
+  const odrRate=1+14*(v/100);
+  const commEl=document.getElementById('comm-rate');
+  const odrEl=document.getElementById('odr-rate');
+  if(commEl) commEl.textContent=commRate.toFixed(1)+'%';
+  if(odrEl) odrEl.textContent=odrRate.toFixed(1)+'%';
+}
+
+// ===== INCOME CALCULATOR =====
+function updateIncome(){
+  const pct=parseInt(document.getElementById('income-percentile')?.value||40);
+  const lbl=document.getElementById('income-pct-label');
+  if(lbl) lbl.textContent='前 '+(100-pct)+'%';
+
+  const commRate=(5+10*(pct/100))/100;
+  const odrRate=(1+14*(pct/100))/100;
+  const directSales=parseFloat(document.getElementById('i-direct')?.value||100000);
+  const l2count=parseInt(document.getElementById('i-l2-count')?.value||5);
+  const l2comm=parseFloat(document.getElementById('i-l2-comm')?.value||3000);
+  const l3count=parseInt(document.getElementById('i-l3-count')?.value||8);
+  const l3comm=parseFloat(document.getElementById('i-l3-comm')?.value||1500);
+  const odrBase=parseFloat(document.getElementById('i-odr-base')?.value||50000);
+
+  const direct=directSales*commRate;
+  const l2trace=l2count*l2comm*0.5;
+  const l3trace=l3count*l3comm*0.25;
+  const odr=odrBase*odrRate;
+  const total=direct+l2trace+l3trace+odr;
+  const maxBar=Math.max(direct,l2trace,l3trace,odr,1);
+
+  const resultEl=document.getElementById('income-result');
+  if(!resultEl) return;
+
+  function fmt(n){return '¥'+n.toLocaleString('zh-CN',{maximumFractionDigits:0});}
+  function bar(pct,color){return `<div class="ib-track"><div class="ib-fill" style="width:${Math.max(2,pct)}%;background:${color};"></div></div>`;}
+
+  resultEl.innerHTML=`
+    <div style="margin-bottom:12px;">
+      <div class="ib"><div class="ib-h"><span class="ib-lbl">① 直接提成（${(commRate*100).toFixed(1)}% × 本人服务额）</span><span class="ib-val">${fmt(direct)}</span></div>${bar((direct/maxBar*100).toFixed(1),'linear-gradient(90deg,var(--gold),#e0a800)')}</div>
+      <div class="ib"><div class="ib-h"><span class="ib-lbl">② 二级追溯（${l2count}人×${fmt(l2comm)}提成×50%）</span><span class="ib-val">${fmt(l2trace)}</span></div>${bar((l2trace/maxBar*100).toFixed(1),'linear-gradient(90deg,var(--purple),#6a4cf5)')}</div>
+      <div class="ib"><div class="ib-h"><span class="ib-lbl">③ 三级追溯（${l3count}人×${fmt(l3comm)}提成×25%）</span><span class="ib-val">${fmt(l3trace)}</span></div>${bar((l3trace/maxBar*100).toFixed(1),'linear-gradient(90deg,var(--blue),#0288d1)')}</div>
+      <div class="ib"><div class="ib-h"><span class="ib-lbl">④ ODR源点分红（${(odrRate*100).toFixed(1)}% × 源点消费总额）</span><span class="ib-val">${fmt(odr)}</span></div>${bar((odr/maxBar*100).toFixed(1),'linear-gradient(90deg,var(--green),#1aab80)')}</div>
+    </div>
+    <div style="background:linear-gradient(135deg,rgba(245,200,66,0.12),rgba(138,110,255,0.08));border:1px solid rgba(245,200,66,0.3);border-radius:var(--radius-sm);padding:16px;display:flex;justify-content:space-between;align-items:center;">
+      <div><div style="font-size:12px;color:var(--text3);">本月预计总收入</div><div style="font-size:10px;color:var(--text3);margin-top:2px;">①+②+③+④</div></div>
+      <div style="font-size:30px;font-weight:900;color:var(--gold);">${fmt(total)}</div>
+    </div>`;
+}
+
+function showComparison(){
+  const pct=parseInt(document.getElementById('income-percentile')?.value||40);
+  const myRate=(5+10*(pct/100))/100;
+  const myDirect=parseFloat(document.getElementById('i-direct')?.value||100000)*myRate;
+  const oldPct=20;
+  const oldRate=(5+10*(oldPct/100))/100;
+  const oldDirect=60000*oldRate;
+  const oldL2=10*2000*0.5;
+  const oldTotal=oldDirect+oldL2+1000;
+  const myL2=parseInt(document.getElementById('i-l2-count')?.value||5)*parseFloat(document.getElementById('i-l2-comm')?.value||3000)*0.5;
+  const myL3=parseInt(document.getElementById('i-l3-count')?.value||8)*parseFloat(document.getElementById('i-l3-comm')?.value||1500)*0.25;
+  const myOdr=parseFloat(document.getElementById('i-odr-base')?.value||50000)*((1+14*(pct/100))/100);
+  const myTotal=myDirect+myL2+myL3+myOdr;
+  const ratio=(myTotal/oldTotal).toFixed(1);
+  const isBetter=myTotal>oldTotal;
+
+  const el=document.getElementById('comparison-result');
+  if(!el) return;
+  el.innerHTML=`
+    <div class="compare-grid">
+      <div class="cmp-card cmp-loser">
+        <div class="cmp-name">传统老上级<br>（TCU前80%，层级高）</div>
+        <div class="cmp-num" style="color:var(--red);">¥${oldTotal.toLocaleString('zh-CN',{maximumFractionDigits:0})}</div>
+        <div style="font-size:10px;color:var(--text3);margin-top:4px;">层级高但贡献低</div>
+      </div>
+      <div class="cmp-card ${isBetter?'cmp-winner':''}">
+        <div class="cmp-name">你（TCU前${100-pct}%<br>更努力）</div>
+        <div class="cmp-num" style="color:${isBetter?'var(--green)':'var(--text)'};">¥${myTotal.toLocaleString('zh-CN',{maximumFractionDigits:0})}</div>
+        <div style="font-size:10px;color:var(--text3);margin-top:4px;">是上级的 <strong style="color:var(--gold);">${ratio}倍</strong></div>
+      </div>
+    </div>
+    <div class="hl hl-gold" style="text-align:center;font-size:12px;margin-top:8px;">
+      ${isBetter?'✅ 下级超过上级！多劳多得，这是系统的常态':'💡 继续提升TCU排名，下级可超上级'}
+    </div>`;
+}
+
+// ===== OVERVIEW =====
+function updateOverview(){
+  const d=parseFloat(document.getElementById('ov-i-direct')?.value||4200);
+  const l2=parseFloat(document.getElementById('ov-i-l2')?.value||6800);
+  const l3=parseFloat(document.getElementById('ov-i-l3')?.value||5400);
+  const total_pop=parseFloat(document.getElementById('ov-i-total')?.value||1000);
+  const l2c=l2*1.0,l3c=l3*0.30;
+  const totalTCU=d+l2c+l3c;
+  const maxBar=Math.max(d,l2c,l3c,1);
+
+  const ids=[['ov-direct',d],['ov-l2',l2c],['ov-l3',l3c]];
+  ids.forEach(([id,v])=>{const el=document.getElementById(id);if(el)el.textContent=v.toLocaleString('zh-CN',{maximumFractionDigits:0});});
+  const bars=[['ov-direct-bar',d],['ov-l2-bar',l2c],['ov-l3-bar',l3c]];
+  bars.forEach(([id,v])=>{const el=document.getElementById(id);if(el)el.style.width=(v/maxBar*100).toFixed(1)+'%';});
+
+  const rankNum=Math.max(1,Math.round(total_pop*(1-totalTCU/(totalTCU+15000))));
+  const pct=((rankNum/total_pop)*100).toFixed(1);
+  const commRate=(5+10*((100-parseFloat(pct))/100)).toFixed(1);
+  const odrRate=(1+14*((100-parseFloat(pct))/100)).toFixed(1);
+
+  const el_tcu=document.getElementById('overview-tcu');
+  if(el_tcu) animateNum(el_tcu,totalTCU,0);
+  const el_rank=document.getElementById('overview-rank');
+  if(el_rank) el_rank.textContent='前 '+pct+'%';
+  const el_comm=document.getElementById('overview-commrate');
+  if(el_comm) el_comm.textContent=commRate+'%';
+  const el_odr=document.getElementById('overview-odrate');
+  if(el_odr) el_odr.textContent=odrRate+'%';
+
+  const auditEl=document.getElementById('audit-table');
+  if(auditEl){
+    const me={name:'我',tcu:totalTCU,rank:rankNum};
+    const rows=[
+      {name:'陈XX',tcu:totalTCU*1.02,rank:rankNum-2,type:'above'},
+      {name:'李XX',tcu:totalTCU*1.01,rank:rankNum-1,type:'above'},
+      {name:'我',tcu:totalTCU,rank:rankNum,type:'me'},
+      {name:'王XX',tcu:totalTCU*0.99,rank:rankNum+1,type:'below'},
+      {name:'张XX',tcu:totalTCU*0.98,rank:rankNum+2,type:'below'}
+    ];
+    auditEl.innerHTML=rows.map(r=>`
+      <div class="rank-row ${r.type==='me'?'rank-me':r.type==='above'?'rank-above':'rank-below'}">
+        <div class="rank-n" style="background:${r.type==='me'?'var(--gold-dim)':r.type==='above'?'var(--green-dim)':'var(--red-dim)'};color:${r.type==='me'?'var(--gold)':r.type==='above'?'var(--green)':'var(--red)'};">${r.rank}</div>
+        <div class="rank-info"><div class="rank-name" style="${r.type==='me'?'color:var(--gold);':''}">${r.type==='me'?'▶ ':''}${r.name}</div><div class="rank-detail">TCU: ${r.tcu.toFixed(0)}</div></div>
+        <div class="rank-tcu" style="color:${r.type==='me'?'var(--gold)':r.type==='above'?'var(--green)':'var(--red)'};">${r.type==='me'?'我的位置':r.type==='above'?'↑比我高':'↓比我低'}</div>
+      </div>`).join('');
+  }
+
+  const emergeEl=document.getElementById('role-emergence');
+  if(emergeEl){
+    const l2ppl=Math.round(l2/2000);
+    const tierPct=parseFloat(pct);
+    const roles=[
+      {name:'Connector 连接者',met:tierPct<=50&&l2ppl>=5,cond:'TCU前50% + 二级≥5人',color:'var(--blue)'},
+      {name:'Coordinator 协调者',met:tierPct<=20&&l2ppl>=15,cond:'TCU前20% + 二级≥15人',color:'var(--purple2)'},
+      {name:'Growth Lead 增长负责人',met:tierPct<=5&&l2ppl>=30,cond:'TCU前5% + 二级≥30人',color:'var(--gold)'}
+    ];
+    emergeEl.innerHTML=roles.map(r=>`
+      <div style="display:flex;justify-content:space-between;align-items:center;padding:11px 12px;border-radius:var(--radius-sm);margin-bottom:7px;background:${r.met?'rgba(255,255,255,0.04)':'rgba(255,255,255,0.02)'};border:1px solid ${r.met?r.color.replace('var(--','').replace(')',''):'var(--border)'};">
+        <div><div style="font-size:12.5px;font-weight:700;color:${r.met?r.color:'var(--text3)'};">${r.name}</div><div style="font-size:10.5px;color:var(--text3);">${r.met?'✅ 已涌现 — 达成条件':'⏳ 需：'+r.cond}</div></div>
+        <span class="badge ${r.met?'b-green':'b-gray'}">${r.met?'已涌现':'未达标'}</span>
+      </div>`).join('');
+  }
+}
+
+// ===== LP CALCULATOR =====
+function calcLP(){
+  const tcuSlider=parseInt(document.getElementById('lp-tcu')?.value||30);
+  const lbl=document.getElementById('lp-tcu-label');
+  if(lbl) lbl.textContent='前'+(100-tcuSlider)+'%';
+  const invest=parseFloat(document.getElementById('lp-invest')?.value||50);
+  const team=parseInt(document.getElementById('lp-team')?.value||10);
+  const tcuW=0.2+0.8*(tcuSlider/100);
+  const investW=Math.min(invest/100,1);
+  const teamW=Math.min(team/30,1);
+  const overallW=(tcuW*0.6+investW*0.3+teamW*0.1).toFixed(3);
+  const el=document.getElementById('lp-result');
+  if(!el) return;
+  el.innerHTML=`
+    <div style="background:var(--gold-dim);border:1px solid rgba(245,200,66,0.3);border-radius:var(--radius-sm);padding:14px;margin-bottom:10px;">
+      <div style="display:flex;justify-content:space-between;align-items:center;">
+        <div><div style="font-size:11px;color:var(--text3);">并表综合权重</div><div style="font-size:10px;color:var(--text3);">TCU(60%)+投资(30%)+团队(10%)</div></div>
+        <div style="font-size:32px;font-weight:900;color:var(--gold);">${overallW}</div>
+      </div>
+    </div>
+    <div style="font-size:11px;color:var(--text3);line-height:2;font-family:var(--mono);background:rgba(255,255,255,0.03);border-radius:8px;padding:10px;">
+      TCU: ${(tcuW*100).toFixed(1)}% × 60% = <span style="color:var(--gold);">${(tcuW*0.6).toFixed(3)}</span><br>
+      投资: ${(investW*100).toFixed(0)}% × 30% = <span style="color:var(--gold);">${(investW*0.3).toFixed(3)}</span><br>
+      团队: ${(teamW*100).toFixed(0)}% × 10% = <span style="color:var(--gold);">${(teamW*0.1).toFixed(3)}</span>
+    </div>
+    <div class="hl ${parseFloat(overallW)>=0.5?'hl-green':'hl-red'}" style="font-size:12px;margin-top:10px;text-align:center;">
+      ${parseFloat(overallW)>=0.5?'✅ 并表权重≥0.5，具备LP股东申请资格':'⚠️ 并表权重<0.5，建议提升TCU排名或追加投资额'}
+    </div>`;
+}
+
+// ===== SHARE =====
+function shareApp(){
+  const url=window.location.href;
+  if(navigator.share){
+    navigator.share({title:'G.R.E.T. 根源生态商业模型',text:'多劳多得，下级可超上级。把信任变成可量化的资本。',url});
+  } else if(navigator.clipboard){
+    navigator.clipboard.writeText(url).then(()=>showToast('✅ 链接已复制到剪贴板'));
+  } else {
+    showToast('🔗 ' + url.substring(0,40)+'...');
+  }
+}
+
+function showAbout(){
+  showToast('G.R.E.T. v6.0 · 根源生态商业模型 · 多劳多得体系');
+}
+
+// ===== TOAST =====
+function showToast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg;t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),2800);
+}
+
+// ===== INIT =====
+window.addEventListener('DOMContentLoaded',()=>{
+  // Hide splash after 2s
+  setTimeout(()=>{
+    const splash=document.getElementById('splash');
+    if(splash) splash.classList.add('hidden');
+  },2000);
+
+  // Init calculators
+  updatePCU('retain',70);
+  calcTCU();
+  updateOverview();
+  calcLP();
+  updateIncome();
+  updatePercentile(50);
+
+  // IntersectionObserver animations
+  const observer=new IntersectionObserver(entries=>{
+    entries.forEach(e=>{
+      if(e.isIntersecting) e.target.classList.add('fade-up');
+    });
+  },{threshold:0.1});
+  document.querySelectorAll('.card,.hstat,.roadmap-item,.th-card').forEach(el=>observer.observe(el));
+});
+</script>
+</body>
+</html>
